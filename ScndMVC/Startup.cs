@@ -28,7 +28,7 @@ namespace ScndMVC
             services.AddControllersWithViews();
 
             services.AddDbContext<MainContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("MainContext")));
+                    options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC"))) ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
