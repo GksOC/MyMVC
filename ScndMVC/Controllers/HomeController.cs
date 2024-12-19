@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ScndMVC.Models;
+using ScndMVC.Models.ViewModels;
 
 namespace ScndMVC.Controllers
 {
@@ -38,6 +38,7 @@ namespace ScndMVC.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            //equivalente a Models.ViewModels.ErrorViewModel, mas o código da linha 8 acelera essa leitura "adicionando-a na biblioteca"
         }
     }
 }

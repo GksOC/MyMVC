@@ -1,6 +1,6 @@
 using System;
 
-namespace ScndMVC.Models
+namespace ScndMVC.Models.ViewModels
 {
     public class ErrorViewModel
     {
