@@ -1,19 +1,19 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ScndMVC.Models.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using ScndMVC.Models;
+using ScndMVC.Models.Services;
+using ScndMVC.Models.ViewModels;
 
 namespace ScndMVC.Controllers
 {
     public class SellersController : Controller
     {
+        //dependências
         private readonly SellerService _sellerService;
-
-        public SellersController(SellerService selllerService)
+        private readonly DepartmentService _departmentService;
+        public SellersController(SellerService selllerService, DepartmentService departmentService)
         {
             _sellerService = selllerService;
+            _departmentService = departmentService;
         }
 
         public IActionResult Index()
@@ -24,7 +24,9 @@ namespace ScndMVC.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var departments = _departmentService.FindAll();
+            var viewModel = new SellerFormViewModel { Departments = departments };
+            return View(viewModel);
         }
 
         [HttpPost]
