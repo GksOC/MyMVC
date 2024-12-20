@@ -25,6 +25,7 @@ namespace ScndMVC.Models.Services
 
         public void Insert(Seller obj)
         {
+            obj.Department = _context.Department.First(); //atribuindo um valor para DepartmentID obrigatório para evitar chegar nulo
             _context.Add(obj);
             _context.SaveChanges();
         }
