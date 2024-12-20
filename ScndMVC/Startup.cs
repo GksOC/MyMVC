@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using ScndMVC.Models;
 using ScndMVC.Data;
+using ScndMVC.Models.Services;
 
 namespace ScndMVC
 {
@@ -31,7 +32,9 @@ namespace ScndMVC
             services.AddDbContext<MainContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC"))) ;
 
-            services.AddScoped<SeedingService>();
+            services.AddScoped<SeedingService>(); //serviço para popular o banco de dados caso esteja vazio
+
+            services.AddScoped<SellerService>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
