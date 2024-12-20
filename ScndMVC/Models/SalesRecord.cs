@@ -8,9 +8,9 @@ namespace ScndMVC.Models
     {
         public int ID { get; set; } 
         public DateTime Date {  get; set; }
-        public double Amout { get; set; }
+        public double Amount { get; set; }
 
-        public SalesStatus Status { get; set; }
+        public SaleStatus Status { get; set; }
         public Seller Seller { get; set; }
 
         public SalesRecord()
@@ -18,11 +18,11 @@ namespace ScndMVC.Models
 
         }
 
-        public SalesRecord(int iD, DateTime date, double amout, SalesStatus status, Seller seller)
+        public SalesRecord(int iD, DateTime date, double amount, SaleStatus status, Seller seller)
         {
             ID = iD;
             Date = date;
-            Amout = amout;
+            Amount = amount;
             Status = status;
             Seller = seller;
         }
