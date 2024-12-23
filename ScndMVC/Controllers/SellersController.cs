@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ScndMVC.Models.Services.Exceptions;
 using System.Linq.Expressions;
+using System.Diagnostics;
 
 namespace ScndMVC.Controllers
 {
@@ -48,11 +49,11 @@ namespace ScndMVC.Controllers
         public IActionResult Delete(int? id)
         {
             if(id == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID not found!"});
 
             var obj = _sellerService.FindByID(id.Value);
             if(obj == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID not found!"});
 
             return View(obj);
         }
@@ -68,11 +69,11 @@ namespace ScndMVC.Controllers
         public IActionResult Details(int? id)
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID not found!"});
 
             var obj = _sellerService.FindByID(id.Value);
             if (obj == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID not found!"});
 
             return View(obj);
         }
@@ -80,11 +81,11 @@ namespace ScndMVC.Controllers
         public IActionResult Edit(int? id)
         {
             if (id == null)
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID not found!"});
 
             var obj = _sellerService.FindByID(id.Value);
             if ((obj == null))
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "ID not found!"});
 
             List<Department> departments = _departmentService.FindAll();
             SellerFormViewModel viewModel = new SellerFormViewModel
@@ -101,7 +102,7 @@ namespace ScndMVC.Controllers
         {
             if(id != seller.ID)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "ID mismatch exception!" });
             }
 
             try
@@ -109,14 +110,22 @@ namespace ScndMVC.Controllers
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
-            catch (NotFoundException)
+            catch (Exception e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message});
             }
-            catch (DbConcurrencyException)
+        }
+
+        public IActionResult Error(string message) 
+        {
+            var viewModel = new ErrorViewModel
             {
-                return BadRequest();
-            }
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+
+            return View(viewModel);
+            return View(viewModel); 
         }
     }
 }
