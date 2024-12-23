@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ScndMVC.Models.Services
 {
@@ -26,7 +27,7 @@ namespace ScndMVC.Models.Services
 
         public Seller FindByID(int id)
         {
-            return _context.Seller.FirstOrDefault(obj => obj.ID == id);
+            return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.ID == id);
         }
 
         public void Remove(int id) 
