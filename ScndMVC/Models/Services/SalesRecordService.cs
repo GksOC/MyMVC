@@ -30,5 +30,23 @@ namespace ScndMVC.Models.Services
                   .OrderByDescending(x => x.Date)
                   .ToListAsync();
         }
+
+        public async Task <List <IGrouping <Department,SalesRecord>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)
+        {
+            var result = from obj in _context.SalesRecord select obj; //transformando de tipo <DbSet> para <IQueryable>
+            if (minDate.HasValue)
+                result = result.Where(x => x.Date >= minDate.Value);
+
+            if (maxDate.HasValue)
+                result = result.Where(x => x.Date <= maxDate.Value);
+
+            var data = await result
+                       .Include(x => x.Seller)
+                       .Include(x => x.Seller.Department)
+                       .OrderByDescending(x => x.Date)
+                       .ToListAsync();
+
+            return data.GroupBy(x => x.Seller.Department).ToList();
+        }
     }
 }
