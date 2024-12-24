@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ScndMVC.Models.Services.Exceptions;
 
 namespace ScndMVC.Models.Services
 {
@@ -33,9 +34,16 @@ namespace ScndMVC.Models.Services
 
         public async Task RemoveAsync (int id) 
         {
+            try
+            {
             var obj = _context.Seller.Find(id);
             _context.Seller.Remove(obj);
             await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException(e.Message);
+            }
         }
 
         public async Task UpdateAsync (Seller obj)

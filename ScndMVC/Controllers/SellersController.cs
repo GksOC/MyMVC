@@ -69,8 +69,15 @@ namespace ScndMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sellerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _sellerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Can't delete seller because it has sales!" });
+                }
         }
 
         public async Task<IActionResult> Details(int? id)
