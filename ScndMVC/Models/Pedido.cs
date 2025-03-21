@@ -12,6 +12,7 @@ namespace ScndMVC.Models
         public string DescPedido { get; set; }
         public float Preco { get; set; }
         public DateTime DataPedido { get; set; }
+        public int status { get; set; } //atualizar para enum posteriormente
 
         public DateTime DataCriacao { get; set; }
         public DateTime? DateModificacao { get; set; }

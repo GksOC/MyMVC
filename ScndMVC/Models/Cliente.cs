@@ -33,7 +33,7 @@ namespace ScndMVC.Models
             Telefone = telefone;
             Email = email;
             Empresa = empresa;
-            Endereco = Endereco;
+            Endereco = endereco;
             DataCriacao = DateTime.Now;
             IdUsuarioCriacao = 0;
         }

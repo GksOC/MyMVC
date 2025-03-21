@@ -4,31 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ScndMVC.Migrations
 {
-    public partial class Teste : Migration
+    public partial class Teste5 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Cliente",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(nullable: true),
-                    Telefone = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Empresa = table.Column<string>(nullable: true),
-                    Endereco = table.Column<string>(nullable: true),
-                    DataCriacao = table.Column<DateTime>(nullable: false),
-                    DateModificacao = table.Column<DateTime>(nullable: true),
-                    IdUsuarioCriacao = table.Column<int>(nullable: false),
-                    IdUsuarioAlteracao = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cliente", x => x.ID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Department",
                 columns: table => new
@@ -40,26 +19,6 @@ namespace ScndMVC.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Department", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Funcionario",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(nullable: true),
-                    Telefone = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Funcao = table.Column<string>(nullable: true),
-                    DataCriacao = table.Column<DateTime>(nullable: false),
-                    DateModificacao = table.Column<DateTime>(nullable: true),
-                    IdUsuarioCriacao = table.Column<int>(nullable: false),
-                    IdUsuarioAlteracao = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Funcionario", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,6 +42,69 @@ namespace ScndMVC.Migrations
                         principalTable: "Department",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SalesRecord",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Amount = table.Column<double>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    SellerID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SalesRecord", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_SalesRecord_Seller_SellerID",
+                        column: x => x.SellerID,
+                        principalTable: "Seller",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cliente",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(nullable: true),
+                    Telefone = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Empresa = table.Column<string>(nullable: true),
+                    Endereco = table.Column<string>(nullable: true),
+                    DataCriacao = table.Column<DateTime>(nullable: false),
+                    DateModificacao = table.Column<DateTime>(nullable: true),
+                    IdUsuarioCriacao = table.Column<int>(nullable: false),
+                    IdUsuarioAlteracao = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cliente", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Funcionario",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(nullable: true),
+                    Telefone = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Funcao = table.Column<string>(nullable: true),
+                    DataCriacao = table.Column<DateTime>(nullable: false),
+                    DateModificacao = table.Column<DateTime>(nullable: true),
+                    IdUsuarioCriacao = table.Column<int>(nullable: false),
+                    IdUsuarioAlteracao = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funcionario", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,28 +136,6 @@ namespace ScndMVC.Migrations
                         name: "FK_Pedido_Funcionario_ResponsavelID",
                         column: x => x.ResponsavelID,
                         principalTable: "Funcionario",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SalesRecord",
-                columns: table => new
-                {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Date = table.Column<DateTime>(nullable: false),
-                    Amount = table.Column<double>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    SellerID = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SalesRecord", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_SalesRecord_Seller_SellerID",
-                        column: x => x.SellerID,
-                        principalTable: "Seller",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });

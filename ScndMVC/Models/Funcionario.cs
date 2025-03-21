@@ -10,7 +10,7 @@ namespace ScndMVC.Models
         public string Nome { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
-        public string Funcao { get; set; }
+        public int Funcao { get; set; } //atualizar para enum posteriormente
 
         public DateTime DataCriacao { get; set; }
         public DateTime? DateModificacao { get; set; }
@@ -25,7 +25,7 @@ namespace ScndMVC.Models
         }
 
         //construtor para o serviço seedingService
-        public Funcionario(int iD, string nome, string telefone, string email, string funcao)
+        public Funcionario(int iD, string nome, string telefone, string email, int funcao)
         {
             ID = iD;
             Nome = nome;

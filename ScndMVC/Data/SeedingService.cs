@@ -18,11 +18,11 @@ namespace ScndMVC.Data
 
         public void Seed()
         {
-            if( _context.Department.Any() &&
-                _context.Seller.Any() &&
-                _context.SalesRecord.Any() &&
-                _context.Funcionario.Any() &&
-                _context.Cliente.Any() &&
+            if( _context.Department.Any() ||
+                _context.Seller.Any() ||
+                _context.SalesRecord.Any() ||
+                _context.Funcionario.Any() ||
+                _context.Cliente.Any() ||
                 _context.Pedido.Any() )
             {
                 return; //DB has been seeded already
@@ -71,7 +71,7 @@ namespace ScndMVC.Data
             SalesRecord sr29 = new SalesRecord(29, new DateTime(2024, 12, 2), 1290.0, SaleStatus.Billed, s1);
             SalesRecord sr30 = new SalesRecord(30, new DateTime(2024, 12, 12), 14500.0, SaleStatus.Pending, s6);
 
-            Funcionario f1 = new Funcionario(1, "Guilherme O.Cantarino", "31995494229", "guilhermeocantarino@gmail.com", "Administrador");
+            Funcionario f1 = new Funcionario(1, "Guilherme O.Cantarino", "31995494229", "guilhermeocantarino@gmail.com", 1);
 
             Cliente c1 = new Cliente(1, "João Victor Ferreira", "31940028922", "joao.victor@gmail.com", "Telecom", "Perto da E.M.Carlos Drummond de Andrade");
 
