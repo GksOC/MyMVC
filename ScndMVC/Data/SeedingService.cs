@@ -18,9 +18,12 @@ namespace ScndMVC.Data
 
         public void Seed()
         {
-            if(_context.Department.Any() ||
-               _context.Seller.Any() ||
-               _context.SalesRecord.Any())
+            if( _context.Department.Any() &&
+                _context.Seller.Any() &&
+                _context.SalesRecord.Any() &&
+                _context.Funcionario.Any() &&
+                _context.Cliente.Any() &&
+                _context.Pedido.Any() )
             {
                 return; //DB has been seeded already
             }
@@ -68,11 +71,21 @@ namespace ScndMVC.Data
             SalesRecord sr29 = new SalesRecord(29, new DateTime(2024, 12, 2), 1290.0, SaleStatus.Billed, s1);
             SalesRecord sr30 = new SalesRecord(30, new DateTime(2024, 12, 12), 14500.0, SaleStatus.Pending, s6);
 
+            Funcionario f1 = new Funcionario(1, "Guilherme O.Cantarino", "31995494229", "guilhermeocantarino@gmail.com", "Administrador");
+
+            Cliente c1 = new Cliente(1, "João Victor Ferreira", "31940028922", "joao.victor@gmail.com", "Telecom", "Perto da E.M.Carlos Drummond de Andrade");
+
+            Pedido p1 = new Pedido(1, c1, f1, "O primeiro pedido", 99.99f, new DateTime(2025,03,20));
+
             _context.Department.AddRange(d1, d2, d3, d4);
             _context.Seller.AddRange(s1, s2, s3, s4, s5, s6);
             _context.SalesRecord.AddRange( sr1,  sr2,  sr3,  sr4,  sr5,  sr6,  sr7,  sr8,  sr9, sr10, 
                                           sr11, sr12, sr13, sr14, sr15, sr16, sr17, sr18, sr19, sr20,
                                           sr21, sr22, sr23, sr24, sr25, sr26, sr27, sr28, sr29, sr30);
+            _context.Funcionario.AddRange(f1);
+            _context.Cliente.AddRange(c1);
+            _context.Pedido.AddRange(p1);
+
 
             _context.SaveChanges();
         }
