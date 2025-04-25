@@ -2,10 +2,11 @@
 using System;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Transactions;
 
 namespace ScndMVC.Models
 {
-    public class Funcionario
+    public class Funcionario : ResourceHistorico
     {
         public int ID { get; set; }
 

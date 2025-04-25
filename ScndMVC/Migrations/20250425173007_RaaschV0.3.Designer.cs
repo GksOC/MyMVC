@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScndMVC.Models;
 
 namespace ScndMVC.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20250425173007_RaaschV0.3")]
+    partial class RaaschV03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,18 +43,18 @@ namespace ScndMVC.Migrations
                     b.Property<int>("IdServicoID")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdUsuarioCriadorID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuarioModificacaoID")
+                        .HasColumnType("int");
+
                     b.Property<string>("NmCliente")
                         .IsRequired()
                         .HasColumnType("varchar(63) CHARACTER SET utf8mb4")
                         .HasMaxLength(63);
 
                     b.Property<int>("Stats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioCriadorID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioModificacaoID")
                         .HasColumnType("int");
 
                     b.Property<float>("Valor")
@@ -64,9 +66,9 @@ namespace ScndMVC.Migrations
 
                     b.HasIndex("IdServicoID");
 
-                    b.HasIndex("UsuarioCriadorID");
+                    b.HasIndex("IdUsuarioCriadorID");
 
-                    b.HasIndex("UsuarioModificacaoID");
+                    b.HasIndex("IdUsuarioModificacaoID");
 
                     b.ToTable("Agendamento");
                 });
@@ -278,15 +280,15 @@ namespace ScndMVC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScndMVC.Models.Funcionario", "UsuarioCriador")
+                    b.HasOne("ScndMVC.Models.Funcionario", "IdUsuarioCriador")
                         .WithMany()
-                        .HasForeignKey("UsuarioCriadorID")
+                        .HasForeignKey("IdUsuarioCriadorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScndMVC.Models.Funcionario", "UsuarioModificacao")
+                    b.HasOne("ScndMVC.Models.Funcionario", "IdUsuarioModificacao")
                         .WithMany()
-                        .HasForeignKey("UsuarioModificacaoID")
+                        .HasForeignKey("IdUsuarioModificacaoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

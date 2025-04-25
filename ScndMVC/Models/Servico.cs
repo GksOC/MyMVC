@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScndMVC.Models
 {
-    public class Servico
+    public class Servico : ResourceHistorico
     {
         public int ID { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Funcionário")]
-        public Funcionario IdFuncionario { get; set; }
+        public Funcionario Funcionario { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [StringLength(63, MinimumLength = 3, ErrorMessage = "{0} deve ter um tamanho entre {2} e {1}")]
@@ -33,10 +33,10 @@ namespace ScndMVC.Models
 
         }
 
-        public Servico(int iD, Funcionario idFuncionario, string nmServico, string dsServico, float valor)
+        public Servico(int iD, Funcionario funcionario, string nmServico, string dsServico, float valor)
         {
             ID = iD;
-            IdFuncionario = idFuncionario;
+            Funcionario = funcionario;
             NmServico = nmServico;
             DsServico = dsServico;
             Valor = valor;

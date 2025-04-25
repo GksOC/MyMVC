@@ -6,13 +6,13 @@ using ScndMVC.Models.Enums;
 
 namespace ScndMVC.Models
 {
-    public class Agendamento
+    public class Agendamento : ResourceHistorico
     {
         public int ID { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Funcionário")]
-        public Funcionario IdFuncionario { get; set; }
+        public Funcionario Funcionario { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Dia")]
@@ -50,10 +50,10 @@ namespace ScndMVC.Models
 
         }
 
-        public Agendamento(int iD, Funcionario idFuncionario, DateTime dtDia, DateTime hrAgendamento, float valor, Status stats)
+        public Agendamento(int iD, Funcionario funcionario, DateTime dtDia, DateTime hrAgendamento, float valor, Status stats)
         {
             ID = iD;
-            IdFuncionario = idFuncionario;
+            Funcionario = funcionario;
             DtDia = dtDia;
             HrAgendamento = hrAgendamento;
             Valor = valor;

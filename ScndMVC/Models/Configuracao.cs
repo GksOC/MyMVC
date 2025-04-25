@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScndMVC.Models
 {
-    public class Configuracao
+    public class Configuracao : ResourceHistorico
     {
         public int ID { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Funcionário")]
-        public Funcionario IdFuncionario { get; set; }
+        public Funcionario Funcionario { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         public bool Domingo { get; set; }
@@ -74,11 +74,11 @@ namespace ScndMVC.Models
 
         }
 
-        public Configuracao(int iD, Funcionario idFuncionario, bool domingo, bool segunda, bool terca, bool quarta, bool quinta, bool sexta, bool sabado, 
+        public Configuracao(int iD, Funcionario funcionario, bool domingo, bool segunda, bool terca, bool quarta, bool quinta, bool sexta, bool sabado, 
                             int periodoAtendimento, DateTime hrInicio, DateTime hrFim, DateTime hrPausaInicio, DateTime hrPausaFim, bool agendaMultipla)
         {
             ID = iD;
-            IdFuncionario = idFuncionario;
+            Funcionario = funcionario;
             Domingo = domingo;
             Segunda = segunda;
             Terca = terca;
