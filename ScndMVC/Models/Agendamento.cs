@@ -1,0 +1,64 @@
+﻿using System.Collections.Generic;
+using System;
+using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using ScndMVC.Models.Enums;
+
+namespace ScndMVC.Models
+{
+    public class Agendamento
+    {
+        public int ID { get; set; }
+
+        [Required(ErrorMessage = "{0} requerido!")]
+        [Display(Name = "Funcionário")]
+        public Funcionario IdFuncionario { get; set; }
+
+        [Required(ErrorMessage = "{0} requerido!")]
+        [Display(Name = "Dia")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime DtDia { get; set; }
+
+        [Required(ErrorMessage = "{0} requerido!")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}")]
+        [Display(Name = "Horário")]
+        public DateTime HrAgendamento { get; set; }
+
+        [Required(ErrorMessage = "{0} requerido!")]
+        [StringLength(63, MinimumLength = 2, ErrorMessage = "{0} deve ter um tamanho entre {2} e {1}")]
+        [Display(Name = "Cliente")]
+        public string NmCliente { get; set; }
+
+        [Required(ErrorMessage = "{0} requerido!")]
+        [Display(Name = "Serviço")]
+        public Servico IdServico { get; set; }
+
+        [Required(ErrorMessage = "{0} requerido!")]
+        [Range(0.0f, 10000.0f, ErrorMessage = ("{0} deve ter um tamanho entre {1} e {2}"))]
+        [Display(Name = "Valor")]
+        [DisplayFormat(DataFormatString = "{0:F2}")]
+        public float Valor { get; set; }
+
+        [Required]
+        public Status Stats { get; set; }
+
+
+        public Agendamento()
+        {
+
+        }
+
+        public Agendamento(int iD, Funcionario idFuncionario, DateTime dtDia, DateTime hrAgendamento, float valor, Status stats)
+        {
+            ID = iD;
+            IdFuncionario = idFuncionario;
+            DtDia = dtDia;
+            HrAgendamento = hrAgendamento;
+            Valor = valor;
+            Stats = stats;
+        }
+
+    }
+}
