@@ -33,12 +33,15 @@ namespace ScndMVC.Models
         [DataType(DataType.Password)]
         public string Senha { get; set; }
 
+        [Required(ErrorMessage = "{0} é requerido.")]
+        public bool Administrador { get; set; }
+
         public Funcionario()
         {
 
         }
 
-        public Funcionario(int iD, string nmProfissional, string telefone, string email, string login, string senha)
+        public Funcionario(int iD, Funcionario criador, string nmProfissional, string telefone, string email, string login, string senha, bool administrador)
         {
             ID = iD;
             NmProfissional = nmProfissional;
@@ -46,6 +49,8 @@ namespace ScndMVC.Models
             Email = email;
             Login = login;
             Senha = senha;
+            Administrador = administrador;
+            adicionarCriador(criador);
         }
 
     }

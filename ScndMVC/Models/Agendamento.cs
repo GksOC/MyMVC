@@ -21,10 +21,9 @@ namespace ScndMVC.Models
         public DateTime DtDia { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}")]
         [Display(Name = "Horário")]
-        public DateTime HrAgendamento { get; set; }
+        public TimeSpan HrAgendamento { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [StringLength(63, MinimumLength = 2, ErrorMessage = "{0} deve ter um tamanho entre {2} e {1}")]
@@ -33,13 +32,12 @@ namespace ScndMVC.Models
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Serviço")]
-        public Servico IdServico { get; set; }
+        public Servico Servico { get; set; }
 
-        [Required(ErrorMessage = "{0} requerido!")]
         [Range(0.0f, 10000.0f, ErrorMessage = ("{0} deve ter um tamanho entre {1} e {2}"))]
         [Display(Name = "Valor")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
-        public float Valor { get; set; }
+        public float? Valor { get; set; }
 
         [Required]
         public Status Stats { get; set; }
@@ -50,14 +48,17 @@ namespace ScndMVC.Models
 
         }
 
-        public Agendamento(int iD, Funcionario funcionario, DateTime dtDia, DateTime hrAgendamento, float valor, Status stats)
+        public Agendamento(int iD, Funcionario criador, Funcionario funcionario, DateTime dtDia, TimeSpan hrAgendamento, string nmCliente, Servico servico, float? valor, Status stats)
         {
             ID = iD;
             Funcionario = funcionario;
             DtDia = dtDia;
             HrAgendamento = hrAgendamento;
+            NmCliente = nmCliente;
+            Servico = servico;
             Valor = valor;
             Stats = stats;
+            adicionarCriador(criador);
         }
 
     }

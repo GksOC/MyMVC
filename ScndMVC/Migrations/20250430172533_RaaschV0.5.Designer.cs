@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScndMVC.Models;
 
 namespace ScndMVC.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20250430172533_RaaschV0.5")]
+    partial class RaaschV05
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace ScndMVC.Migrations
                     b.Property<DateTime>("DtDia")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("DtModificao")
+                    b.Property<DateTime>("DtModificao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("FuncionarioID")
@@ -41,7 +43,10 @@ namespace ScndMVC.Migrations
                     b.Property<int>("IdCriador")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdModificador")
+                    b.Property<int>("IdModificador")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdServicoID")
                         .HasColumnType("int");
 
                     b.Property<string>("NmCliente")
@@ -49,20 +54,18 @@ namespace ScndMVC.Migrations
                         .HasColumnType("varchar(63) CHARACTER SET utf8mb4")
                         .HasMaxLength(63);
 
-                    b.Property<int>("ServicoID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Stats")
                         .HasColumnType("int");
 
                     b.Property<float?>("Valor")
+                        .IsRequired()
                         .HasColumnType("float");
 
                     b.HasKey("ID");
 
                     b.HasIndex("FuncionarioID");
 
-                    b.HasIndex("ServicoID");
+                    b.HasIndex("IdServicoID");
 
                     b.ToTable("Agendamento");
                 });
@@ -82,7 +85,7 @@ namespace ScndMVC.Migrations
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("DtModificao")
+                    b.Property<DateTime>("DtModificao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("FuncionarioID")
@@ -103,7 +106,7 @@ namespace ScndMVC.Migrations
                     b.Property<int>("IdCriador")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdModificador")
+                    b.Property<int>("IdModificador")
                         .HasColumnType("int");
 
                     b.Property<int>("PeriodoAtendimento")
@@ -160,7 +163,7 @@ namespace ScndMVC.Migrations
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("DtModificao")
+                    b.Property<DateTime>("DtModificao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
@@ -170,7 +173,7 @@ namespace ScndMVC.Migrations
                     b.Property<int>("IdCriador")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdModificador")
+                    b.Property<int>("IdModificador")
                         .HasColumnType("int");
 
                     b.Property<string>("Login")
@@ -266,13 +269,13 @@ namespace ScndMVC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DsServico")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
-                        .HasMaxLength(255);
+                        .HasColumnType("varchar(63) CHARACTER SET utf8mb4")
+                        .HasMaxLength(63);
 
                     b.Property<DateTime>("DtCriacao")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("DtModificao")
+                    b.Property<DateTime>("DtModificao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("FuncionarioID")
@@ -281,7 +284,7 @@ namespace ScndMVC.Migrations
                     b.Property<int>("IdCriador")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdModificador")
+                    b.Property<int>("IdModificador")
                         .HasColumnType("int");
 
                     b.Property<string>("NmServico")
@@ -307,9 +310,9 @@ namespace ScndMVC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScndMVC.Models.Servico", "Servico")
+                    b.HasOne("ScndMVC.Models.Servico", "IdServico")
                         .WithMany()
-                        .HasForeignKey("ServicoID")
+                        .HasForeignKey("IdServicoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -13,26 +13,25 @@ namespace ScndMVC.Models
         public DateTime DtCriacao { get; set; }
 
         [Display(Name = "Data de modificação")]
-        public DateTime DtModificao { get; set; }
+        public DateTime? DtModificao { get; set; }
 
         [Required]
         [Display(Name = "Criador")]
-        public Funcionario UsuarioCriador { get; set; }
+        public int IdCriador { get; set; }
 
-        [Required]
         [Display(Name = "Autor modificacao")]
-        public Funcionario UsuarioModificacao { get; set; }
+        public int? IdModificador { get; set; }
 
 
         public void adicionarCriador(Funcionario funcionario)
         {
-            UsuarioCriador = funcionario;
+            IdCriador = funcionario.ID;
             DtCriacao = DateTime.Now;
         }
 
         public void atualizarModificao(Funcionario funcionario)
         {
-            UsuarioModificacao = funcionario;
+            IdModificador = funcionario.ID;
             DtModificao = DateTime.Now;
         }
     }

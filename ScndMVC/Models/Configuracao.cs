@@ -40,28 +40,28 @@ namespace ScndMVC.Models
         public int PeriodoAtendimento { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}")]
         [Display(Name = "Início do expediente")]
-        public DateTime HrInicio { get; set; }
+        public TimeSpan HrInicio { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}")]
         [Display(Name = "Fim do expediente")]
-        public DateTime HrFim { get; set; }
+        public TimeSpan HrFim { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}")]
         [Display(Name = "Início do intervalo")]
-        public DateTime HrPausaInicio { get; set; }
+        public TimeSpan HrPausaInicio { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [DataType(DataType.Date)]
+        [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}")]
         [Display(Name = "Fim do intervalo")]
-        public DateTime HrPausaFim { get; set; }
+        public TimeSpan HrPausaFim { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Agendamento com múltiplos períodos")]
@@ -74,8 +74,8 @@ namespace ScndMVC.Models
 
         }
 
-        public Configuracao(int iD, Funcionario funcionario, bool domingo, bool segunda, bool terca, bool quarta, bool quinta, bool sexta, bool sabado, 
-                            int periodoAtendimento, DateTime hrInicio, DateTime hrFim, DateTime hrPausaInicio, DateTime hrPausaFim, bool agendaMultipla)
+        public Configuracao(int iD, Funcionario criador, Funcionario funcionario, bool domingo, bool segunda, bool terca, bool quarta, bool quinta, bool sexta, bool sabado, 
+                            int periodoAtendimento, TimeSpan hrInicio, TimeSpan hrFim, TimeSpan hrPausaInicio, TimeSpan hrPausaFim, bool agendaMultipla)
         {
             ID = iD;
             Funcionario = funcionario;
@@ -92,6 +92,7 @@ namespace ScndMVC.Models
             HrPausaInicio = hrPausaInicio;
             HrPausaFim = hrPausaFim;
             AgendaMultipla = agendaMultipla;
+            adicionarCriador(funcionario);
         }
 
     }

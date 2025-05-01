@@ -18,7 +18,7 @@ namespace ScndMVC.Models
         [Display(Name = "Nome do serviço")]
         public string NmServico { get; set; }
 
-        [StringLength(63)]
+        [StringLength(255)]
         [Display(Name = "Descrição")]
         public string DsServico { get; set; }
 
@@ -33,13 +33,14 @@ namespace ScndMVC.Models
 
         }
 
-        public Servico(int iD, Funcionario funcionario, string nmServico, string dsServico, float valor)
+        public Servico(int iD, Funcionario criador, Funcionario funcionario, string nmServico, string dsServico, float valor)
         {
             ID = iD;
             Funcionario = funcionario;
             NmServico = nmServico;
             DsServico = dsServico;
             Valor = valor;
+            adicionarCriador(criador);
         }
 
     }
