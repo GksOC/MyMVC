@@ -100,7 +100,7 @@ namespace ScndMVC.Data
                 _context.Servico.Add(so1);
 
                 Agendamento a1 = new Agendamento(1, administrador, f1, new DateTime(2025, 4, 30), new TimeSpan(8, 0, 0), "Fulano", so1, null, Status.Agendado);
-                Agendamento a2 = new Agendamento(2, administrador, f1, new DateTime(2025, 4, 30), new TimeSpan(7, 30, 0), "Cilcano", so1, 30f, Status.Realizado);
+                Agendamento a2 = new Agendamento(2, administrador, f1, new DateTime(2025, 4, 30), new TimeSpan(7, 30, 0), "Ciclano", so1, 30f, Status.Realizado);
                 Agendamento a3 = new Agendamento(3, administrador, f1, new DateTime(2025, 4, 30), new TimeSpan(7, 0, 0), "Beltrano", so1, null, Status.Cancelado);
                 _context.Agendamento.AddRange(a1, a2, a3);
 
