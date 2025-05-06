@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using ScndMVC.Models.Services.Exceptions;
 using System.Linq.Expressions;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ScndMVC.Controllers
 {
@@ -25,8 +26,12 @@ namespace ScndMVC.Controllers
             _departmentService = departmentService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
+            var funcionarioID = int.Parse(User.FindFirst("FuncionarioID").Value);
+            var tipo = User.FindFirst("TipoUsuario").Value;
+
             var list = await _sellerService.FindAllAsync();
             return View(list);
         }
@@ -38,6 +43,7 @@ namespace ScndMVC.Controllers
             return View(viewModel);
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Seller seller)
@@ -128,7 +134,7 @@ namespace ScndMVC.Controllers
 
             try
             {
-                _sellerService.UpdateAsync(seller);
+                await _sellerService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)

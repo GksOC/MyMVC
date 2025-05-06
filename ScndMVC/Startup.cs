@@ -10,6 +10,11 @@ using ScndMVC.Data;
 using ScndMVC.Models.Services;
 using System.Globalization;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ScndMVC
 {
@@ -25,17 +30,45 @@ namespace ScndMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                options.HttpOnly = HttpOnlyPolicy.Always;
+                options.Secure = CookieSecurePolicy.Always;
+            });
+
             services.AddControllersWithViews();
 
+            services.AddControllersWithViews(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
+
             services.AddDbContext<MainContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC"))) ;
+                    options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC")));
 
             services.AddScoped<SeedingService>(); //serviço para popular o banco de dados caso esteja vazio
 
-            services.AddScoped<SellerService>(); 
+            services.AddScoped<SellerService>();
             services.AddScoped<DepartmentService>();
             services.AddScoped<SalesRecordService>();
             services.AddScoped<FuncionarioService>();
+
+            services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
+            {
+                options.LoginPath = "/Funcionario/Login";
+                options.AccessDeniedPath = "/Home/index";
+                options.LogoutPath = "/Funcionario/Index";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Sempre usar HTTPS
+                options.Cookie.SameSite = SameSiteMode.Lax; // ou Strict, dependendo do comportamento desejado
+                options.Cookie.HttpOnly = true;
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,18 +95,21 @@ namespace ScndMVC
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Funcionario}/{action=Index}/{id?}");
             });
         }
     }

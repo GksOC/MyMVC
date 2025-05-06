@@ -12,5 +12,7 @@ namespace ScndMVC.Models.ViewModels
         [DataType(DataType.Password)]
         public string Senha { get; set; }
 
+        public string UserID { get; set; }
+        public string TipoUser { get; set; }
     }
 }
