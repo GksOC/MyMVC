@@ -10,11 +10,8 @@ using ScndMVC.Data;
 using ScndMVC.Models.Services;
 using System.Globalization;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace ScndMVC
 {
@@ -39,17 +36,11 @@ namespace ScndMVC
 
             services.AddControllersWithViews();
 
-            services.AddControllersWithViews(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-
-                options.Filters.Add(new AuthorizeFilter(policy));
-            });
-
             services.AddDbContext<MainContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC")));
+
+            services.AddControllersWithViews();
+            services.AddSession();
 
             services.AddScoped<SeedingService>(); //serviço para popular o banco de dados caso esteja vazio
 
@@ -68,7 +59,7 @@ namespace ScndMVC
                 options.Cookie.HttpOnly = true;
             });
 
-
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,8 +92,8 @@ namespace ScndMVC
 
             app.UseRouting();
 
+            app.UseSession();
             app.UseCookiePolicy();
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

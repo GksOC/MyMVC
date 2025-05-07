@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using ScndMVC.Models.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ScndMVC.Controllers
 {
@@ -15,8 +14,6 @@ namespace ScndMVC.Controllers
             _salesRecordService = salesRecordService;
         }
 
-
-        [Authorize]
         public IActionResult Index()
         {
             return View();

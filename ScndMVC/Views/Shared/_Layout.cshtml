@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,7 +33,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a>
                         </li>
                         <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Funcionario" asp-action="Index">Sair</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Funcionario" asp-action="Logout">Sair</a>
+                        </li>
+                        <li>
+                            <span> @Context.Session.GetString("Nome") </span>
                         </li>
                     </ul>
                 </div>

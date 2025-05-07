@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using ScndMVC.Models.Services.Exceptions;
 using System.Linq.Expressions;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
+using ScndMVC.Filters;
 
 namespace ScndMVC.Controllers
 {
@@ -26,12 +26,9 @@ namespace ScndMVC.Controllers
             _departmentService = departmentService;
         }
 
-        [Authorize]
+        [Autorizacao("admin")]
         public async Task<IActionResult> Index()
         {
-            var funcionarioID = int.Parse(User.FindFirst("FuncionarioID").Value);
-            var tipo = User.FindFirst("TipoUsuario").Value;
-
             var list = await _sellerService.FindAllAsync();
             return View(list);
         }

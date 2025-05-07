@@ -22,7 +22,7 @@ namespace ScndMVC.Models.Services
             return await _context.Funcionario.OrderBy(x => x.Login).ToListAsync();
         }
 
-        public (int codigo, List<Claim> claims) VerificarLogin(string login, string senha)
+        public (int codigo, Funcionario usuario) VerificarLogin(string login, string senha)
         {
             Funcionario conta = _context.Funcionario.Where(a => a.Login == login).FirstOrDefault();
             if (conta != null)
@@ -31,19 +31,19 @@ namespace ScndMVC.Models.Services
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, login),
-                        new Claim("FuncionarioID", conta.ID.ToString())
+                        //new Claim(ClaimTypes.Name, login),
+                        //new Claim("FuncionarioID", conta.ID.ToString())
                     };
 
                     if (conta.Administrador)
                     {
-                        claims.Add(new Claim("TipoUsuario", "admin"));
-                        return (2, claims);
+                        //claims.Add(new Claim("TipoUsuario", "admin"));
+                        return (2, conta);
                     }
                     else
                     {
-                        claims.Add(new Claim("TipoUsuario", "funcionario"));
-                        return (1, claims);
+                        //claims.Add(new Claim("TipoUsuario", "funcionario"));
+                        return (1, conta);
                     }
                 }
                 else
