@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ScndMVC</title>
+    <title>@ViewData["Title"] - Raasch</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-slate.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -20,6 +20,11 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
+                        @if(@Context.Session.GetString("Tipo") == "admin"){
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Funcionario" asp-action="Gerenciar">Gerenciar Contas</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Departments" asp-action="Index">Departments</a>
                         </li>

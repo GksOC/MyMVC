@@ -58,7 +58,7 @@ namespace ScndMVC.Models
             Servico = servico;
             Valor = valor;
             Stats = stats;
-            adicionarCriador(criador);
+            adicionarCriador(criador.ID);
         }
 
     }

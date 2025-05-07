@@ -40,7 +40,7 @@ namespace ScndMVC.Models
             NmServico = nmServico;
             DsServico = dsServico;
             Valor = valor;
-            adicionarCriador(criador);
+            adicionarCriador(criador.ID);
         }
 
     }

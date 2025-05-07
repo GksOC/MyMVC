@@ -23,15 +23,15 @@ namespace ScndMVC.Models
         public int? IdModificador { get; set; }
 
 
-        public void adicionarCriador(Funcionario funcionario)
+        public void adicionarCriador(int idCriador)
         {
-            IdCriador = funcionario.ID;
+            IdCriador = idCriador;
             DtCriacao = DateTime.Now;
         }
 
-        public void atualizarModificao(Funcionario funcionario)
+        public void atualizarModificao(int idFuncionario)
         {
-            IdModificador = funcionario.ID;
+            IdModificador = idFuncionario;
             DtModificao = DateTime.Now;
         }
     }

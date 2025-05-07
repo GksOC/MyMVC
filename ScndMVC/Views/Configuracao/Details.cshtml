@@ -1,0 +1,52 @@
+﻿@model ScndMVC.Models.Funcionario
+
+@{
+    ViewData["Title"] = "Detalhes do "+Model.NmProfissional;
+}
+
+<h2>@ViewData["Title"]</h2>
+<br />
+<div>
+    <dl class="d1-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NmProfissional)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NmProfissional)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Telefone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Login)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Login)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Senha)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Senha)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Administrador)
+        </dt>
+        <dd>
+            @if (Model.Administrador) {<p>SIM</p>} else{<p>NÃO</p>}
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Gerenciar" class="btn btn-light">Voltar</a>
+    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-default">Editar</a>
+</div>

@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.Transactions;
+using Microsoft.EntityFrameworkCore;
 
 namespace ScndMVC.Models
 {
@@ -36,12 +37,14 @@ namespace ScndMVC.Models
         [Required(ErrorMessage = "{0} é requerido.")]
         public bool Administrador { get; set; }
 
+        public Configuracao Configuracao { get; set; }
+
         public Funcionario()
         {
 
         }
 
-        public Funcionario(int iD, Funcionario criador, string nmProfissional, string telefone, string email, string login, string senha, bool administrador)
+        public Funcionario(int iD, Funcionario criador, string nmProfissional, string telefone, string email, string login, string senha, bool administrador, Configuracao config)
         {
             ID = iD;
             NmProfissional = nmProfissional;
@@ -50,7 +53,8 @@ namespace ScndMVC.Models
             Login = login;
             Senha = senha;
             Administrador = administrador;
-            adicionarCriador(criador);
+            Configuracao = config;
+            adicionarCriador(criador.ID);
         }
 
     }

@@ -140,7 +140,7 @@ namespace ScndMVC.Controllers
             }
         }
 
-        public IActionResult Error(string message) 
+        public IActionResult Error(string message)
         {
             var viewModel = new ErrorViewModel
             {

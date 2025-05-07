@@ -19,7 +19,7 @@ namespace ScndMVC.Filters
 
             if (string.IsNullOrEmpty(tipoUsuario) || (_tipoRequerido != null && tipoUsuario != _tipoRequerido))
             {
-                context.Result = new RedirectToActionResult("Index", "Funcionario", null);
+                context.Result = new RedirectToActionResult("Index", "Funcionario", new { acesso = "Acesso não autorizado" });
             }
         }
     }

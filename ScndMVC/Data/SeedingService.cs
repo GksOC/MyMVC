@@ -85,16 +85,18 @@ namespace ScndMVC.Data
                 administrador.Login = "admin";
                 administrador.Senha = "raasch@2025";
                 administrador.Administrador = true;
-                administrador.adicionarCriador(administrador);
+                administrador.adicionarCriador(administrador.ID);
 
                 _context.Funcionario.Add(administrador);
 
-                Funcionario f1 = new Funcionario(2, administrador, "Funcionario exemplo", "3138242099", "RaaschCabeleleiroUnissex@gmail.com", "cobaia", "teste123", false);
-                _context.Funcionario.Add(f1);
-                Configuracao c1 = new Configuracao(1, administrador, f1, false, false, false, false, false, false, false, 30,
+
+                Configuracao c1 = new Configuracao(1, administrador, false, false, false, false, false, false, false, 30,
                                                    new TimeSpan(7, 0, 0), new TimeSpan(18, 0, 0), new TimeSpan(12, 0, 0), new TimeSpan(14, 0, 0),
                                                    false);
                 _context.Configuracao.Add(c1);
+
+                Funcionario f1 = new Funcionario(2, administrador, "Funcionario exemplo", "3138242099", "RaaschCabeleleiroUnissex@gmail.com", "cobaia", "teste123", false, c1);
+                _context.Funcionario.Add(f1);
 
                 Servico so1 = new Servico(1, administrador, f1, "Exemplo", "Este serviço é apenas um exemplo para mostrar como o aplicativo funciona", 10f);
                 _context.Servico.Add(so1);

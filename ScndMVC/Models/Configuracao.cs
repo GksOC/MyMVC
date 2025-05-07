@@ -10,10 +10,6 @@ namespace ScndMVC.Models
         public int ID { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [Display(Name = "Funcionário")]
-        public Funcionario Funcionario { get; set; }
-
-        [Required(ErrorMessage = "{0} requerido!")]
         public bool Domingo { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
@@ -74,11 +70,10 @@ namespace ScndMVC.Models
 
         }
 
-        public Configuracao(int iD, Funcionario criador, Funcionario funcionario, bool domingo, bool segunda, bool terca, bool quarta, bool quinta, bool sexta, bool sabado, 
+        public Configuracao(int iD, Funcionario criador, bool domingo, bool segunda, bool terca, bool quarta, bool quinta, bool sexta, bool sabado, 
                             int periodoAtendimento, TimeSpan hrInicio, TimeSpan hrFim, TimeSpan hrPausaInicio, TimeSpan hrPausaFim, bool agendaMultipla)
         {
             ID = iD;
-            Funcionario = funcionario;
             Domingo = domingo;
             Segunda = segunda;
             Terca = terca;
@@ -92,7 +87,7 @@ namespace ScndMVC.Models
             HrPausaInicio = hrPausaInicio;
             HrPausaFim = hrPausaFim;
             AgendaMultipla = agendaMultipla;
-            adicionarCriador(funcionario);
+            adicionarCriador(criador.ID);
         }
 
     }
