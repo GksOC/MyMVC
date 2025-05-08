@@ -2,8 +2,9 @@
 {
     public enum Status : int 
     {
-        Agendado = 0,
-        Realizado = 1,
-        Cancelado = 2
+        Aberto = 0,
+        Agendado = 1,
+        Realizado = 2,
+        Cancelado = 3,
     }
 }

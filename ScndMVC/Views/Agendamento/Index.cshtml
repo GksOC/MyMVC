@@ -1,0 +1,86 @@
+﻿
+@{
+    @using ScndMVC.Models.Enums
+    @model IEnumerable<ScndMVC.Models.Agendamento>;
+    ViewData["Title"] = "Agendamento do dia: " + Model.First().DtDia.ToString("dd/MM/yyyy");
+}
+
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-action="Create" class="btn btn-defeault">Criar novo Serviço</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thread>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HrAgendamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NmCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Servico.NmServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thread>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.HrAgendamento.ToString(@"hh\:mm")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NmCliente)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Servico.NmServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Valor)
+                </td>
+                <td>
+                    @if( item.Stats.Equals(Status.Aberto) ){
+                        <a asp-action="Create" asp-route-id="@item.ID">Agendar</a>
+                    }
+                    else if ( item.Stats.Equals(Status.Agendado) ){
+                        <a asp-action="Edit" asp-route-id="@item.ID">Confirmar</a>
+                        <a onclick="confirmarExclusao(@item.ID)" class="btn btn-danger">Excluir</a>
+                    }
+                    else {
+                        <a asp-action="Details" asp-route-id="@item.ID">Ver detalhes</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    function confirmarExclusao(id) {
+        Swal.fire({
+            title: 'Realmente deseja excluir este serviço?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/Servico/Delete/' + id;
+            }
+        });
+    }
+</script>

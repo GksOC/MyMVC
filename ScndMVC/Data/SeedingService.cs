@@ -42,6 +42,7 @@ namespace ScndMVC.Data
                 _context.Configuracao.Add(c1);
 
                 Funcionario f1 = new Funcionario(2, administrador, "Funcionario exemplo", "3138242099", "RaaschCabeleleiroUnissex@gmail.com", "cobaia", "teste123", false, c1);
+                f1.Configuracao = c1;
                 _context.Funcionario.Add(f1);
 
                 Servico so1 = new Servico(1, administrador, f1, "Exemplo", "Este serviço é apenas um exemplo para mostrar como o aplicativo funciona", 10f);

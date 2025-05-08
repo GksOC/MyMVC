@@ -39,6 +39,7 @@ namespace ScndMVC.Models
 
         public Configuracao Configuracao { get; set; }
         public ICollection<Servico> Servicos { get; set; } = new List<Servico>();
+        public ICollection<Agendamento> Agendamentos { get; set; } = new List<Agendamento>();
 
         public Funcionario()
         {

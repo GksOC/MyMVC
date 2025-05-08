@@ -10,9 +10,8 @@ namespace ScndMVC.Models
     {
         public int ID { get; set; }
 
-        [Required(ErrorMessage = "{0} requerido!")]
-        [Display(Name = "Funcionário")]
-        public Funcionario Funcionario { get; set; }
+        [Required]
+        public int FuncionarioID { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Dia")]
@@ -25,12 +24,10 @@ namespace ScndMVC.Models
         [Display(Name = "Horário")]
         public TimeSpan HrAgendamento { get; set; }
 
-        [Required(ErrorMessage = "{0} requerido!")]
         [StringLength(63, MinimumLength = 2, ErrorMessage = "{0} deve ter um tamanho entre {2} e {1}")]
         [Display(Name = "Cliente")]
         public string NmCliente { get; set; }
 
-        [Required(ErrorMessage = "{0} requerido!")]
         [Display(Name = "Serviço")]
         public Servico Servico { get; set; }
 
@@ -40,6 +37,7 @@ namespace ScndMVC.Models
         public float? Valor { get; set; }
 
         [Required]
+        [Display(Name = "Status")]
         public Status Stats { get; set; }
 
 
@@ -51,7 +49,7 @@ namespace ScndMVC.Models
         public Agendamento(int iD, Funcionario criador, Funcionario funcionario, DateTime dtDia, TimeSpan hrAgendamento, string nmCliente, Servico servico, float? valor, Status stats)
         {
             ID = iD;
-            Funcionario = funcionario;
+            FuncionarioID = funcionario.ID;
             DtDia = dtDia;
             HrAgendamento = hrAgendamento;
             NmCliente = nmCliente;

@@ -27,10 +27,13 @@
                         }
                         @if(Context.Session.GetString("Tipo") == "func"){
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Configuracao" asp-action="Index">Configurar Conta</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Agendamento" asp-action="Index">Agendamentos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Servico" asp-action="Index">Serviços</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Configuracao" asp-action="Index">Configurar Conta</a>
                             </li>
                         }
 
