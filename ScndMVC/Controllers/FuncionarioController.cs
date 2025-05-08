@@ -226,7 +226,7 @@ namespace ScndMVC.Controllers
             }
             catch (IntegrityException e)
             {
-                return RedirectToAction(nameof(Error), new { message = "Can't delete seller because it has sales!" });
+                return RedirectToAction(nameof(Error), new { message = "Erro de integridade!" });
             }
         }
 

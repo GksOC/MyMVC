@@ -28,9 +28,9 @@ namespace ScndMVC.Models.Services
             return await _context.Servico.FirstOrDefaultAsync(obj => obj.ID == id);
         }
 
-        public async Task UpdateAsync(Funcionario obj)
+        public async Task UpdateAsync(Servico obj)
         {
-            bool hasAny = await _context.Funcionario.AnyAsync(x => x.ID == obj.ID);
+            bool hasAny = await _context.Servico.AnyAsync(x => x.ID == obj.ID);
             if (!hasAny)
             {
                 throw new KeyNotFoundException("ID não encontrada");
@@ -46,9 +46,10 @@ namespace ScndMVC.Models.Services
             }
         }
 
-        public async Task InsertAsync(Servico obj)
+        public async Task InsertAsync(Servico obj, int id)
         {
-            _context.Add(obj);
+            var func = await _context.Funcionario.FirstOrDefaultAsync(x => x.ID == id);
+            func.Servicos.Add(obj);
             await _context.SaveChangesAsync();
         }
 
@@ -56,8 +57,8 @@ namespace ScndMVC.Models.Services
         {
             try
             {
-                var obj = _context.Funcionario.Find(id);
-                _context.Funcionario.Remove(obj);
+                var obj = _context.Servico.Find(id);
+                _context.Servico.Remove(obj);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException e)

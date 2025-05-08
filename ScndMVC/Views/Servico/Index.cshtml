@@ -39,7 +39,7 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ID">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                    <a onclick="confirmarExclusao(@item.ID)" class="btn btn-danger">Excluir</a>
                 </td>
             </tr>
         }
@@ -51,3 +51,19 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<script>
+    function confirmarExclusao(id) {
+        Swal.fire({
+            title: 'Realmente deseja excluir este serviço?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/Servico/Delete/' + id;
+            }
+        });
+    }
+</script>

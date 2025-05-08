@@ -21,6 +21,7 @@ namespace ScndMVC.Controllers
     {
         //dependências
         private readonly ServicoService _servicoService;
+        private int _funcionarioID;
 
         public ServicoController (ServicoService funcionarioService)
         {
@@ -30,7 +31,8 @@ namespace ScndMVC.Controllers
         [Autorizacao("func")]
         public async Task<IActionResult> Index()
         {
-            List<Servico> list = await _servicoService.FindAllAsync(HttpContext.Session.GetInt32("FuncionarioID").Value);
+            _funcionarioID = HttpContext.Session.GetInt32("FuncionarioID").Value;
+            List<Servico> list = await _servicoService.FindAllAsync(_funcionarioID);
             return View(list);
         }
 
@@ -54,9 +56,10 @@ namespace ScndMVC.Controllers
 
             try
             {
-                servico.adicionarCriador(HttpContext.Session.GetInt32("FuncionarioID").Value);
-                servico.FuncionarioID = HttpContext.Session.GetInt32("FuncionarioID").Value;
-                await _servicoService.InsertAsync(servico);
+                _funcionarioID = HttpContext.Session.GetInt32("FuncionarioID").Value;
+                servico.adicionarCriador(_funcionarioID);
+                servico.FuncionarioID = _funcionarioID;
+                await _servicoService.InsertAsync(servico, _funcionarioID);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
@@ -82,7 +85,7 @@ namespace ScndMVC.Controllers
         [Autorizacao("func")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Funcionario obj)
+        public async Task<IActionResult> Edit(int id, Servico obj)
         {
             if (!ModelState.IsValid) //validando caso o usuário esteja com javaScript desabilitado
             {
@@ -107,8 +110,7 @@ namespace ScndMVC.Controllers
         }
 
         [Autorizacao("func")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -118,7 +120,7 @@ namespace ScndMVC.Controllers
             }
             catch (IntegrityException e)
             {
-                return RedirectToAction(nameof(Error), new { message = "Can't delete seller because it has sales!" });
+                return RedirectToAction(nameof(Error), new { message = "Erro de integridade!" });
             }
         }
 
