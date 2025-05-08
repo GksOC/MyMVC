@@ -9,8 +9,8 @@ using ScndMVC.Models;
 namespace ScndMVC.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20250425173007_RaaschV0.3")]
-    partial class RaaschV03
+    [Migration("20250508041510_V1.1")]
+    partial class V11
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,22 +31,19 @@ namespace ScndMVC.Migrations
                     b.Property<DateTime>("DtDia")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("DtModificao")
+                    b.Property<DateTime?>("DtModificao")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("FuncionarioID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("HrAgendamento")
-                        .HasColumnType("datetime(6)");
+                    b.Property<TimeSpan>("HrAgendamento")
+                        .HasColumnType("time(6)");
 
-                    b.Property<int>("IdServicoID")
+                    b.Property<int>("IdCriador")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUsuarioCriadorID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUsuarioModificacaoID")
+                    b.Property<int?>("IdModificador")
                         .HasColumnType("int");
 
                     b.Property<string>("NmCliente")
@@ -54,21 +51,20 @@ namespace ScndMVC.Migrations
                         .HasColumnType("varchar(63) CHARACTER SET utf8mb4")
                         .HasMaxLength(63);
 
+                    b.Property<int>("ServicoID")
+                        .HasColumnType("int");
+
                     b.Property<int>("Stats")
                         .HasColumnType("int");
 
-                    b.Property<float>("Valor")
+                    b.Property<float?>("Valor")
                         .HasColumnType("float");
 
                     b.HasKey("ID");
 
                     b.HasIndex("FuncionarioID");
 
-                    b.HasIndex("IdServicoID");
-
-                    b.HasIndex("IdUsuarioCriadorID");
-
-                    b.HasIndex("IdUsuarioModificacaoID");
+                    b.HasIndex("ServicoID");
 
                     b.ToTable("Agendamento");
                 });
@@ -85,20 +81,29 @@ namespace ScndMVC.Migrations
                     b.Property<bool>("Domingo")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("FuncionarioID")
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DtModificao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("HrFim")
+                        .HasColumnType("time(6)");
+
+                    b.Property<TimeSpan>("HrInicio")
+                        .HasColumnType("time(6)");
+
+                    b.Property<TimeSpan>("HrPausaFim")
+                        .HasColumnType("time(6)");
+
+                    b.Property<TimeSpan>("HrPausaInicio")
+                        .HasColumnType("time(6)");
+
+                    b.Property<int>("IdCriador")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("HrFim")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("HrInicio")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("HrPausaFim")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("HrPausaInicio")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int?>("IdModificador")
+                        .HasColumnType("int");
 
                     b.Property<int>("PeriodoAtendimento")
                         .HasColumnType("int");
@@ -123,23 +128,7 @@ namespace ScndMVC.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("FuncionarioID");
-
                     b.ToTable("Configuracao");
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.Department", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Department");
                 });
 
             modelBuilder.Entity("ScndMVC.Models.Funcionario", b =>
@@ -148,9 +137,27 @@ namespace ScndMVC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<bool>("Administrador")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("ConfiguracaoID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DtModificao")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("IdCriador")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdModificador")
+                        .HasColumnType("int");
 
                     b.Property<string>("Login")
                         .IsRequired()
@@ -174,68 +181,9 @@ namespace ScndMVC.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Funcionario");
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.SalesRecord", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("SellerID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SellerID");
-
-                    b.ToTable("SalesRecord");
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.Seller", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<double>("BaseSalary")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("ConfiguracaoID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(60) CHARACTER SET utf8mb4")
-                        .HasMaxLength(60);
-
-                    b.HasKey("ID");
-
                     b.HasIndex("ConfiguracaoID");
 
-                    b.HasIndex("DepartmentID");
-
-                    b.ToTable("Seller");
+                    b.ToTable("Funcionario");
                 });
 
             modelBuilder.Entity("ScndMVC.Models.Servico", b =>
@@ -245,10 +193,22 @@ namespace ScndMVC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("DsServico")
-                        .HasColumnType("varchar(63) CHARACTER SET utf8mb4")
-                        .HasMaxLength(63);
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .HasMaxLength(255);
 
-                    b.Property<int>("FuncionarioID")
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DtModificao")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("FuncionarioID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCriador")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("IdModificador")
                         .HasColumnType("int");
 
                     b.Property<string>("NmServico")
@@ -263,7 +223,7 @@ namespace ScndMVC.Migrations
 
                     b.HasIndex("FuncionarioID");
 
-                    b.ToTable("Servicos");
+                    b.ToTable("Servico");
                 });
 
             modelBuilder.Entity("ScndMVC.Models.Agendamento", b =>
@@ -274,61 +234,25 @@ namespace ScndMVC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ScndMVC.Models.Servico", "IdServico")
+                    b.HasOne("ScndMVC.Models.Servico", "Servico")
                         .WithMany()
-                        .HasForeignKey("IdServicoID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScndMVC.Models.Funcionario", "IdUsuarioCriador")
-                        .WithMany()
-                        .HasForeignKey("IdUsuarioCriadorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScndMVC.Models.Funcionario", "IdUsuarioModificacao")
-                        .WithMany()
-                        .HasForeignKey("IdUsuarioModificacaoID")
+                        .HasForeignKey("ServicoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScndMVC.Models.Configuracao", b =>
+            modelBuilder.Entity("ScndMVC.Models.Funcionario", b =>
                 {
-                    b.HasOne("ScndMVC.Models.Funcionario", "Funcionario")
+                    b.HasOne("ScndMVC.Models.Configuracao", "Configuracao")
                         .WithMany()
-                        .HasForeignKey("FuncionarioID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.SalesRecord", b =>
-                {
-                    b.HasOne("ScndMVC.Models.Seller", "Seller")
-                        .WithMany("Sales")
-                        .HasForeignKey("SellerID");
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.Seller", b =>
-                {
-                    b.HasOne("ScndMVC.Models.Configuracao", null)
-                        .WithMany("Sellers")
                         .HasForeignKey("ConfiguracaoID");
-
-                    b.HasOne("ScndMVC.Models.Department", "Department")
-                        .WithMany("Sellers")
-                        .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("ScndMVC.Models.Servico", b =>
                 {
-                    b.HasOne("ScndMVC.Models.Funcionario", "Funcionario")
-                        .WithMany()
-                        .HasForeignKey("FuncionarioID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ScndMVC.Models.Funcionario", null)
+                        .WithMany("Servicos")
+                        .HasForeignKey("FuncionarioID");
                 });
 #pragma warning restore 612, 618
         }

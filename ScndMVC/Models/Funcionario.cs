@@ -38,6 +38,7 @@ namespace ScndMVC.Models
         public bool Administrador { get; set; }
 
         public Configuracao Configuracao { get; set; }
+        public ICollection<Servico> Servicos { get; set; } = new List<Servico>();
 
         public Funcionario()
         {

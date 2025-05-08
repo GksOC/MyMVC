@@ -129,20 +129,6 @@ namespace ScndMVC.Migrations
                     b.ToTable("Configuracao");
                 });
 
-            modelBuilder.Entity("ScndMVC.Models.Department", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Department");
-                });
-
             modelBuilder.Entity("ScndMVC.Models.Funcionario", b =>
                 {
                     b.Property<int>("ID")
@@ -198,67 +184,6 @@ namespace ScndMVC.Migrations
                     b.ToTable("Funcionario");
                 });
 
-            modelBuilder.Entity("ScndMVC.Models.SalesRecord", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("SellerID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SellerID");
-
-                    b.ToTable("SalesRecord");
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.Seller", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<double>("BaseSalary")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("ConfiguracaoID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(60) CHARACTER SET utf8mb4")
-                        .HasMaxLength(60);
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ConfiguracaoID");
-
-                    b.HasIndex("DepartmentID");
-
-                    b.ToTable("Seller");
-                });
-
             modelBuilder.Entity("ScndMVC.Models.Servico", b =>
                 {
                     b.Property<int>("ID")
@@ -275,7 +200,7 @@ namespace ScndMVC.Migrations
                     b.Property<DateTime?>("DtModificao")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("FuncionarioID")
+                    b.Property<int?>("FuncionarioID")
                         .HasColumnType("int");
 
                     b.Property<int>("IdCriador")
@@ -321,33 +246,11 @@ namespace ScndMVC.Migrations
                         .HasForeignKey("ConfiguracaoID");
                 });
 
-            modelBuilder.Entity("ScndMVC.Models.SalesRecord", b =>
-                {
-                    b.HasOne("ScndMVC.Models.Seller", "Seller")
-                        .WithMany("Sales")
-                        .HasForeignKey("SellerID");
-                });
-
-            modelBuilder.Entity("ScndMVC.Models.Seller", b =>
-                {
-                    b.HasOne("ScndMVC.Models.Configuracao", null)
-                        .WithMany("Sellers")
-                        .HasForeignKey("ConfiguracaoID");
-
-                    b.HasOne("ScndMVC.Models.Department", "Department")
-                        .WithMany("Sellers")
-                        .HasForeignKey("DepartmentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ScndMVC.Models.Servico", b =>
                 {
-                    b.HasOne("ScndMVC.Models.Funcionario", "Funcionario")
-                        .WithMany()
-                        .HasForeignKey("FuncionarioID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ScndMVC.Models.Funcionario", null)
+                        .WithMany("Servicos")
+                        .HasForeignKey("FuncionarioID");
                 });
 #pragma warning restore 612, 618
         }

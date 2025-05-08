@@ -1,0 +1,53 @@
+﻿
+@{
+    @model IEnumerable<ScndMVC.Models.Servico>;
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-defeault">Criar novo Serviço</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thread>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NmServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsServico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thread>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NmServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DsServico)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Valor)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

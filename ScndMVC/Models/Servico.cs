@@ -9,9 +9,7 @@ namespace ScndMVC.Models
     {
         public int ID { get; set; }
 
-        [Required(ErrorMessage = "{0} requerido!")]
-        [Display(Name = "Funcionário")]
-        public Funcionario Funcionario { get; set; }
+        public int FuncionarioID { get; set; } //tunelamento
 
         [Required(ErrorMessage = "{0} requerido!")]
         [StringLength(63, MinimumLength = 3, ErrorMessage = "{0} deve ter um tamanho entre {2} e {1}")]
@@ -36,7 +34,7 @@ namespace ScndMVC.Models
         public Servico(int iD, Funcionario criador, Funcionario funcionario, string nmServico, string dsServico, float valor)
         {
             ID = iD;
-            Funcionario = funcionario;
+            FuncionarioID = funcionario.ID;
             NmServico = nmServico;
             DsServico = dsServico;
             Valor = valor;

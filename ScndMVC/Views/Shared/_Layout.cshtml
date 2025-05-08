@@ -29,7 +29,11 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Configuracao" asp-action="Index">Configurar Conta</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Servico" asp-action="Index">Serviços</a>
+                            </li>
                         }
+
                         @if(Context.Session.GetInt32("FuncionarioID").HasValue){
                             <li>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Funcionario" asp-action="Logout">Sair</a>

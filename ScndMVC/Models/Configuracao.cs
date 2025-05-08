@@ -63,8 +63,6 @@ namespace ScndMVC.Models
         [Display(Name = "Agendamento com múltiplos períodos")]
         public bool AgendaMultipla {  get; set; }
 
-        public ICollection<Seller> Sellers { get; set; } = new List<Seller>();
-
         public Configuracao()
         {
 

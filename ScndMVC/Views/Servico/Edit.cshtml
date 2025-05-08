@@ -1,0 +1,63 @@
+﻿@{
+    @model ScndMVC.Models.Funcionario;
+    ViewData["Title"] = "Editar funcionário "+Model.NmProfissional;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="NmProfissional" class="control-label"></label>
+                <input asp-for="NmProfissional" class="form-control" />
+                <span asp-validation-for="NmProfissional" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Telefone" class="control-label"></label>
+                <input asp-for="Telefone" class="form-control" />
+                <span asp-validation-for="Telefone" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Login" class="control-label"></label>
+                <input asp-for="Login" class="form-control" />
+                <span asp-validation-for="Login" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label"> Nova Senha</label>
+                <input asp-for="Senha" class="form-control" />
+                <span asp-validation-for="Senha" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <input asp-for="Administrador" class="form-check-input" disabled/>
+                <label asp-for="Administrador" class="form-check-label" disabled></label>
+            </div>
+            <br />
+
+            <div style="margin-top: 7px" class="form-group">
+                <a asp-action="Gerenciar" class="btn btn-light">Voltar</a>
+                <input type="submit" value="Salvar mudanças" class="btn btn-default" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

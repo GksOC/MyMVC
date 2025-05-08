@@ -44,11 +44,9 @@ namespace ScndMVC
 
             services.AddScoped<SeedingService>(); //serviço para popular o banco de dados caso esteja vazio
 
-            services.AddScoped<SellerService>();
-            services.AddScoped<DepartmentService>();
-            services.AddScoped<SalesRecordService>();
             services.AddScoped<FuncionarioService>();
             services.AddScoped<ConfiguracaoService>();
+            services.AddScoped<ServicoService>();
 
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
             {

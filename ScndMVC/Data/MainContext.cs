@@ -13,10 +13,6 @@ namespace ScndMVC.Models
         {
         }
 
-        public DbSet<ScndMVC.Models.Department> Department { get; set; }
-        public DbSet<Seller> Seller { get; set; }
-        public DbSet<SalesRecord> SalesRecord { get; set; }
-
         public DbSet<Agendamento> Agendamento { get; set; }
         public DbSet<Configuracao> Configuracao { get; set; }
         public DbSet<Funcionario> Funcionario { get; set; }
