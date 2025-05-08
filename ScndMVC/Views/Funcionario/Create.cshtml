@@ -1,7 +1,6 @@
-﻿@{
-    @using Microsoft.AspNetCore.Http;
-    @model ScndMVC.Models.Servico;
-    ViewData["Title"] = "Criar novo serviço";
+﻿﻿@{
+    @model ScndMVC.Models.Funcionario;
+    ViewData["Title"] = "Criar nova conta";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -12,30 +11,40 @@
         <form asp-action="Create">
             <div asp-validation-summary="All" class="text-danger"> </div>
             <div class="form-group">
-                <label asp-for="NmServico" class="control-label"></label>
-                <input asp-for="NmServico" class="form-control" />
+                <label asp-for="NmProfissional" class="control-label"></label>
+                <input asp-for="NmProfissional" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="DsServico" class="control-label"></label>
-                <input asp-for="DsServico" class="form-control" />
+                <label asp-for="Telefone" class="control-label"></label>
+                <input asp-for="Telefone" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Valor" class="control-label"></label>
-                <input asp-for="Valor" class="form-control" />
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Login" class="control-label"></label>
+                <input asp-for="Login" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Senha" class="control-label"></label>
+                <input asp-for="Senha" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input asp-for="Administrador" class="form-check-input" />
+                <label asp-for="Administrador" class="form-check-label"></label>
             </div>
 
+
             <div style="margin-top: 7px" class="form-group">
-                <a asp-action="Index" class="btn btn-light">Voltar</a>
                 <input type="submit" value="Criar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-
