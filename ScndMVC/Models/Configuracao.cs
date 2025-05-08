@@ -31,8 +31,8 @@ namespace ScndMVC.Models
         public bool Sabado { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]
-        [Range(10, 60, ErrorMessage = ("{0} deve ter um tamanho entre {1} a {2} (minutos)"))]
-        [Display(Name = "Período de atendimento")]
+        [ValoresPermitidos(15, 30, 45, 60)]
+        [Display(Name = "Período de atendimento (em minutos)")]
         public int PeriodoAtendimento { get; set; }
 
         [Required(ErrorMessage = "{0} requerido!")]

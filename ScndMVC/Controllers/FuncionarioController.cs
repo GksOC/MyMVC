@@ -69,24 +69,22 @@ namespace ScndMVC.Controllers
                     HttpContext.Session.SetInt32("FuncionarioID", tupla.usuario.ID);
                     HttpContext.Session.SetString("Nome", tupla.usuario.NmProfissional);
                     HttpContext.Session.SetString("Tipo", "func");
-                    ViewBag.TipoUser = "funcionario";
                     //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     //{
                     //    return Redirect(returnUrl); //página desejada
                     //}
-                    return RedirectToAction("Index", "Departments"); //página padrão
+                    return RedirectToAction("Index", "Home"); //página padrão
                     //break;
                 case 2:
                     //await autentica(tupla.claims);
                     HttpContext.Session.SetInt32("FuncionarioID", tupla.usuario.ID);
                     HttpContext.Session.SetString("Nome", tupla.usuario.NmProfissional);
                     HttpContext.Session.SetString("Tipo", "admin");
-                    ViewBag.TipoUser = "admin";
                     //if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     //{
                     //    return Redirect(returnUrl); //página desejada
                     //}
-                    return RedirectToAction("Index", "Sellers"); //página padrão
+                    return RedirectToAction("Gerenciar", "Funcionario"); //página padrão
                     //break;
                 default:
                     return View();
@@ -110,7 +108,7 @@ namespace ScndMVC.Controllers
         }
 
 
-
+        [Autorizacao("admin")]
         public async Task<IActionResult> Gerenciar()
         {
             var funcionarios = await _funcionarioService.FindAllAsync();
@@ -178,6 +176,7 @@ namespace ScndMVC.Controllers
 
             try
             {
+                obj.atualizarModificao(HttpContext.Session.GetInt32("FuncionarioID").Value);
                 await _funcionarioService.UpdateAsync(obj);
                 return RedirectToAction(nameof(Gerenciar));
             }

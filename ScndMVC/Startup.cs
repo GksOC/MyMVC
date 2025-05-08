@@ -48,6 +48,7 @@ namespace ScndMVC
             services.AddScoped<DepartmentService>();
             services.AddScoped<SalesRecordService>();
             services.AddScoped<FuncionarioService>();
+            services.AddScoped<ConfiguracaoService>();
 
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", options =>
             {

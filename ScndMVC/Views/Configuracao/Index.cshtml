@@ -1,35 +1,105 @@
-﻿
-@{
-    @model ScndMVC.Models.ViewModels.LoginViewModel;
+﻿@{
+    @using Microsoft.AspNetCore.Http
+    @model ScndMVC.Models.Configuracao;
+    ViewData["Title"] = "Configurações de " + Context.Session.GetString("Nome");
 }
 
-<form asp-action="Login">
-    <div class="row">
-        <div asp-validation-summary="All" class="text-danger"> </div>
-        <div class="col-sm-4 col-sm-offset-4 text-left">
-            <label asp-for="Login" class="control-label"></label>
-            <input asp-for="Login" class="form-control" placeholder="inserir login"/>
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-4 text-left">
-            <label asp-for="Senha" class="control-label"></label>
-            <input asp-for="Senha" class="form-control" />
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div style="margin-top: 7px" class="form-group">
-            <input type="submit" value="Checar Login" class="btn btn-default" />
-            @if (ViewBag.Erro != null)
-            {
-                <span class="alert alert-danger">@ViewBag.Erro</span>
-            }
-        </div>
-    </div>
+<h2>@ViewData["Title"]</h2>
 
-</form>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <input asp-for="Domingo" class="form-check-input" />
+                <label asp-for="Domingo" class="form-check-label" ></label>
+            </div>
+            <br />
+            <div class="form-group">
+                <input asp-for="Segunda" class="form-check-input" />
+                <label asp-for="Segunda" class="form-check-label"></label>
+            </div>
+            <br />
+            <div class="form-group">
+                <input asp-for="Terca" class="form-check-input" />
+                <label asp-for="Terca" class="form-check-label"></label>
+            </div>
+            <br />
+            <div class="form-group">
+                <input asp-for="Quarta" class="form-check-input" />
+                <label asp-for="Quarta" class="form-check-label"></label>
+            </div>
+            <br />
+            <div class="form-group">
+                <input asp-for="Quinta" class="form-check-input" />
+                <label asp-for="Quinta" class="form-check-label"></label>
+            </div>
+            <br />
+            <div class="form-group">
+                <input asp-for="Sexta" class="form-check-input" />
+                <label asp-for="Sexta" class="form-check-label"></label>
+            </div>
+            <br />
+            <div class="form-group">
+                <input asp-for="Sabado" class="form-check-input" />
+                <label asp-for="Sabado" class="form-check-label"></label>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="PeriodoAtendimento" class="control-label"></label>
+                <input asp-for="PeriodoAtendimento" class="form-control" />
+                <span asp-validation-for="PeriodoAtendimento" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="HrInicio" class="control-label"></label>
+                <input asp-for="HrInicio" class="form-control" />
+                <span asp-validation-for="HrInicio" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="HrFim" class="control-label"></label>
+                <input asp-for="HrFim" class="form-control" />
+                <span asp-validation-for="HrFim" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="HrPausaInicio" class="control-label"></label>
+                <input asp-for="HrPausaInicio" class="form-control" />
+                <span asp-validation-for="HrPausaInicio" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="HrPausaFim" class="control-label"></label>
+                <input asp-for="HrPausaFim" class="form-control" />
+                <span asp-validation-for="HrPausaFim" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <input asp-for="AgendaMultipla" class="form-check-input" />
+                <label asp-for="AgendaMultipla" class="form-check-label"></label>
+            </div>
+            <br />
+
+            <div style="margin-top: 7px" class="form-group">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Volta</a>
+                <input type="submit" value="Salvar mudanças" class="btn btn-default" />
+                @if (ViewBag.Mensagem != null)
+                {
+                    <span class="alert alert-info">@ViewBag.Mensagem</span>
+                }
+                @if (@TempData["Erro"] != null)
+                {
+                    <span class="alert alert-danger">@TempData["Erro"]</span>
+                }
+            </div>
+        </form>
+
+    </div>
+</div>
 
 @section Scripts {
     @{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScndMVC.Models.ViewModels;
@@ -20,7 +21,15 @@ namespace ScndMVC.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            switch (HttpContext.Session.GetString("Tipo"))
+            {
+                case "admin":
+                    return RedirectToAction("Gerenciar", "Funcionario");
+                case "func":
+                    return View("Index");
+                default:
+                    return RedirectToAction("Index", "Funcionario");
+            }
         }
 
         public IActionResult Privacy()
