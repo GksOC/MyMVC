@@ -12,6 +12,8 @@ using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.CookiePolicy;
+using System.Text.Json;
+using System.ComponentModel;
 
 namespace ScndMVC
 {
@@ -34,15 +36,19 @@ namespace ScndMVC
                 options.Secure = CookieSecurePolicy.Always;
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // Aceita camelCase
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;  // Ignora a diferença de maiúsculas/minúsculas
+            });
 
             services.AddDbContext<MainContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC")));
 
-            services.AddControllersWithViews();
             services.AddSession();
 
             services.AddScoped<SeedingService>(); //serviço para popular o banco de dados caso esteja vazio
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //sistema de para agilizar a obteção de dados da sessão
 
             services.AddScoped<FuncionarioService>();
             services.AddScoped<ConfiguracaoService>();

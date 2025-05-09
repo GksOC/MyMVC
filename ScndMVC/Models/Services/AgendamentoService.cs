@@ -18,10 +18,12 @@ namespace ScndMVC.Models.Services
             _context = context;
         }
 
+
         public async Task<Agendamento> FindByIDAsync(int id)
         {
             return await _context.Agendamento.Include(x => x.Servico).FirstOrDefaultAsync(obj => obj.ID == id);
         }
+
 
         public async Task UpdateAsync(Agendamento obj)
         {
@@ -46,6 +48,7 @@ namespace ScndMVC.Models.Services
         {
             return await _context.Agendamento.Include(x => x.Servico).Where(y => y.FuncionarioID == id && y.DtDia == DateTime.Now.Date).ToListAsync();
         }
+
 
         public async Task<List<Agendamento>> CriarAgendamentoDoDia(int id, DateTime data)
         {
@@ -76,6 +79,14 @@ namespace ScndMVC.Models.Services
             await _context.SaveChangesAsync();
 
             return list;
+        }
+
+
+        public async Task InsertAsync(Agendamento obj, int id)
+        {
+            var func = await _context.Funcionario.FirstOrDefaultAsync(x => x.ID == id);
+            func.Agendamentos.Add(obj);
+            await _context.SaveChangesAsync();
         }
     }
 }

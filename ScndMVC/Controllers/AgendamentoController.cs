@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScndMVC.Filters;
 using ScndMVC.Models;
+using ScndMVC.Data;
 using ScndMVC.Models.Services;
 using ScndMVC.Models.ViewModels;
 using System;
@@ -15,7 +16,7 @@ using ScndMVC.Models.Services.Exceptions;
 using System.Diagnostics;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using System.Linq;
-
+using System.IO;
 
 namespace ScndMVC.Controllers
 {
@@ -42,27 +43,6 @@ namespace ScndMVC.Controllers
             }
             list = list.OrderBy(x => x.HrAgendamento).ToList();
             return View(list);
-        }
-
-        [Autorizacao("func")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> Edit([FromBody] Agendamento obj)
-        {
-            if (!ModelState.IsValid) //validando caso o usuário esteja com javaScript desabilitado
-            {
-                return Json(new { success = false, message = "Erro no model!" }); ;
-            }
-
-            try
-            {
-                await _agendamentoService.UpdateAsync(obj);
-                return Json(new { success = true, message = "Cadastrado com sucesso!" });
-            }
-            catch (Exception e)
-            {
-                return Json(new { success = false, message = "Erro ao cadastrar o agendamento!" });
-            }
         }
 
         [Autorizacao("func")]
@@ -116,32 +96,90 @@ namespace ScndMVC.Controllers
         }
 
         [Autorizacao("func")]
-        [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        public async Task<IActionResult> Finalizar([FromBody] AgendarViewModel dto)
         {
-            if (id == null)
-                return RedirectToAction(nameof(Error), new { message = "ID inválida!" });
+            Agendamento a = await _agendamentoService.FindByIDAsync(dto.AgendamentoID);
+            if (dto.Valor <= 0f)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Informe um valor válido!" });
+            }
 
-            var obj = await _agendamentoService.FindByIDAsync(id.Value);
-            if (obj == null)
-                return RedirectToAction(nameof(Error), new { message = "Não existe agendamento com ID (" + id + ")" });
+            a.Valor = dto.Valor;
+            a.Stats = Models.Enums.Status.Realizado;
+            a.atualizarModificao(HttpContext.Session.GetInt32("FuncionarioID").Value);
+            await _agendamentoService.UpdateAsync(a);
 
-            return View(obj);
+            return Ok();
         }
 
         [Autorizacao("func")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> Cancelar(int id)
         {
+            Agendamento a = await _agendamentoService.FindByIDAsync(id);
+            a.Valor = null;
+            a.Stats = Models.Enums.Status.Cancelado;
+            a.atualizarModificao(Session.FuncionarioID(HttpContext));
+            await _agendamentoService.UpdateAsync(a);
+
+            Agendamento novoA = new Agendamento
+            {
+                FuncionarioID = a.FuncionarioID,
+                DtDia = a.DtDia,
+                HrAgendamento = a.HrAgendamento,
+                Stats = Models.Enums.Status.Aberto
+            };
+            novoA.adicionarCriador(Session.FuncionarioID(HttpContext));
+            await _agendamentoService.InsertAsync(novoA, Session.FuncionarioID(HttpContext));
+
             try
             {
                 return RedirectToAction(nameof(Index));
             }
             catch (IntegrityException e)
             {
-                return RedirectToAction(nameof(Error), new { message = "Erro de integridade!" });
+                return RedirectToAction(nameof(Error), new { message = "Erro de integridade! "+ e });
             }
+        }
+
+        [Autorizacao("func")]
+        [HttpGet]
+        public async Task<IActionResult> GerarAgendamentoExtra()
+        {
+            Agendamento agendamento = new Agendamento
+            {
+                FuncionarioID = Session.FuncionarioID(HttpContext),
+                DtDia = DateTime.Now.Date
+            };
+            agendamento.adicionarCriador(Session.FuncionarioID(HttpContext));
+
+            var servicos = await _servicoService.FindAllAsync(HttpContext.Session.GetInt32("FuncionarioID").Value);
+
+            var dto = new AgendamentoViewModel
+            {
+                Agendamento = agendamento,
+                Servicos = servicos,
+                ServicoSelecionado = null
+            };
+
+            return Json(dto);
+        }
+
+        [Autorizacao("func")]
+        [HttpPost]
+        public async Task<IActionResult> AgendarExtra([FromBody] AgendamentoViewModel dto)
+        {
+            //using var reader = new StreamReader(Request.Body); //para debugar o objeto JSON que vem da requisição
+            //var rawJson = await reader.ReadToEndAsync();
+            if (dto.ServicoSelecionado == null || dto.ServicoSelecionado == 0)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Nenhum serviço foi selecionado" });
+            }
+
+            await _agendamentoService.InsertAsync(dto.Agendamento, Session.FuncionarioID(HttpContext));
+
+            return Ok();
         }
 
         public IActionResult Error(string message)

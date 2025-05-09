@@ -4,10 +4,12 @@
     @model IEnumerable<ScndMVC.Models.Agendamento>;
     ViewData["Title"] = "Agendamento do dia: " + Model.First().DtDia.ToString("dd/MM/yyyy");
 }
-
+<br />
 <h2>@ViewData["Title"]</h2>
+<br /> 
+
 <p>
-    <a asp-action="Create" class="btn btn-defeault">Criar novo Serviço</a>
+    <button class="btn btn-secondary" onclick="abrirModalAgendamentoExtra()">Criar Agendamento Extra</button>
 </p>
 
 <table class="table table-striped table-hover">
@@ -33,7 +35,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="status-@item.Stats">
                 <td>
                     @item.HrAgendamento.ToString(@"hh\:mm")
                 </td>
@@ -51,11 +53,11 @@
                         <button class="btn btn-primary" onclick="abrirModalAgendamento(@item.ID)">Agendar</button>
                     }
                     else if ( item.Stats.Equals(Status.Agendado) ){
-                        <a asp-action="Edit" asp-route-id="@item.ID">Confirmar</a>
-                        <a onclick="confirmarExclusao(@item.ID)" class="btn btn-danger">Excluir</a>
+                        <a onclick="abrirModalFinalizarAgendamento(@item.ID)" class="btn btn-success">Confirmar</a>
+                        <a onclick="confirmarExclusao(@item.ID)" class="btn btn-danger">Cancelar</a>
                     }
                     else {
-                        <a asp-action="Details" asp-route-id="@item.ID">Ver detalhes</a>
+                        <a onclick="verDetalhes(@item.ID)" class="btn btn-info">Ver detalhes</a>
                     }
                 </td>
             </tr>
@@ -69,17 +71,97 @@
     }
 }
 
+
+
 <script>
+    function verDetalhes(id) {
+        $.get(`/Agendamento/SelecionarAgendamento/${id}`, function (dto) {
+            const agendamento = dto.agendamento;
+            const servicos = dto.servicos;
+            let status = "";
+            switch(agendamento.stats.toString())
+                {
+                    case "1":
+                        status = "Agendado"
+                        break;
+                    case "2":
+                        status = "Realizado"
+                        break;
+                    case "3":
+                        status = "Cancelado"
+                        break;
+                    default:
+                        status = "ERRO"
+                }
+            Swal.fire({
+                title: 'Detalhes do agendamento',
+                html:
+                    `
+                    <dl class="d1-horizontal">
+                        <dt>
+                            Dia
+                        </dt>
+                        <dd>
+                            ${(() => {
+                                const partes = agendamento.dtDia.split('T')[0].split('-'); // ["yyyy", "mm", "dd"]
+                                return `${partes[2]}/${partes[1]}/${partes[0]}`; // "dd/mm/yyyy"
+                            })()}
+                        </dd>
+                        <dt>
+                            Horário
+                        </dt>
+                        <dd>
+                            ${agendamento.hrAgendamento.hours.toString().padStart(2, '0')}:${agendamento.hrAgendamento.minutes.toString().padStart(2, '0')}
+                        </dd>
+                        <dt>
+                            Nome Cliente
+                        </dt>
+                        <dd>
+                            ${agendamento.nmCliente}
+                        </dd>
+                        <dt>
+                            Nome do serviço
+                        </dt>
+                        <dd>
+                            ${servicos[agendamento.servico.id].nmServico}
+                        </dd>
+                        <dt>
+                            Descrição
+                        </dt>
+                        <dd>
+                            ${servicos[agendamento.servico.id].dsServico}
+                            
+                        </dd>
+                        <dt>
+                            Valor
+                        </dt>
+                        <dd>
+                            ${agendamento.valor}
+                        </dd>
+                        <dt>
+                            Status
+                        </dt>
+                        <dd>
+                            ${status}
+                        </dd>
+                    </dl>
+                    `,
+                showCancelButton: true,
+                cancelButtonText: 'Voltar'
+            });
+        });
+    }
+
     function confirmarExclusao(id) {
         Swal.fire({
-            title: 'Realmente deseja excluir este serviço?',
+            title: 'Realmente deseja cancelar este agendamento?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sim',
             cancelButtonText: 'Não'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/Servico/Cancelar/' + id;
+                window.location.href = '/Agendamento/Cancelar/' + id;
             }
         });
     }
@@ -107,7 +189,7 @@
                      <br>
                      <div class="form-group" style="display: flex; flex-direction: column;">
                         <label class="control-label"> Horário </label>
-                        <input id="HrAgendamento" type="time" class="swal2-input" value="${agendamento.hrAgendamento.hours.toString().padStart(2, '0')}:${agendamento.hrAgendamento.minutes.toString().padStart(2, '0')}"" readonly>
+                        <input id="HrAgendamento" type="time" class="swal2-input" value="${agendamento.hrAgendamento.hours.toString().padStart(2, '0')}:${agendamento.hrAgendamento.minutes.toString().padStart(2, '0')}" readonly>
                     </div>
                     <br>
                     <div class="form-group" style="display: flex; flex-direction: column;">
@@ -116,12 +198,16 @@
                     </div>
                     <br>
                     <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label" style="display: flex; flex-direction: column;"> Serviço </label>
+                         ${selectHtml}
+                    </div>
+                    <br>
+                    <div class="form-group" style="display: flex; flex-direction: column;">
                         <label class="control-label"> Valor do serviço </label>
                         <input id="Valor" type="number" class="swal2-input" value="${agendamento.valor}">
                     </div>
                     <br>
-                    <label class="control-label" style="display: flex; flex-direction: column;"> Serviço </label>
-                     ${selectHtml}`,
+                     `,
                     focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: 'Salvar',
@@ -152,4 +238,167 @@
             });
         });
     }
+
+
+    function abrirModalFinalizarAgendamento(id) {
+        $.get(`/Agendamento/SelecionarAgendamento/${id}`, function (dto) {
+            debugger
+            const agendamento = dto.agendamento;
+
+            // Cria a lista de opções HTML
+            Swal.fire({
+                title: 'Confirmar realização do serviço',
+                html:
+                    `
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Valor final pago no serviço: </label>
+                        <input id="Valor" type="number" class="swal2-input" value="${agendamento.valor}">
+                    </div>
+                    <br>
+                    `,
+                    focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Finalizar',
+                preConfirm: () => {
+                    return {
+                        agendamentoID: agendamento.id,
+                        nmCliente: "",
+                        valor: parseFloat($('#Valor').val().replace(',', '.')),
+                        servicoID: null
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Agendamento/Finalizar',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(result.value),
+                        success: function () {
+                            Swal.fire('Atualizado!', 'Agendamento Fiznalizado.', 'success')
+                                .then(() => location.reload());
+                        },
+                        error: function () {
+                            Swal.fire('Erro!', 'Erro ao finalizar agendamento.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    function abrirModalAgendamentoExtra() {
+        $.get(`/Agendamento/GerarAgendamentoExtra`, function (dto) {
+            const agendamento = dto.agendamento;
+            const servicos = dto.servicos;
+            const data = agendamento.dtDia.split('T')[0]
+
+            // Cria a lista de opções HTML
+            let selectHtml = `<select id="Servico" class="swal2-input" style="width:100%;margin-top:10px;">`;
+            servicos.forEach(s => {
+                const selected = s.id === dto.servicoSelecionado ? 'selected' : '';
+                selectHtml += `<option value="${s.id}" ${selected}>${s.nmServico}</option>`;
+            });
+            selectHtml += `</select>`;
+
+            Swal.fire({
+                title: 'Agendamento extra (${data})',
+                html:
+                    `
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Horário </label>
+                        <input id="HrAgendamento" type="time" class="swal2-input" value="">
+                    </div>
+                    <br>
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Nome Cliente </label>
+                        <input id="NmCliente" type="text" class="swal2-input" value="">
+                    </div>
+                    <br>
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label" style="display: flex; flex-direction: column;"> Serviço </label>
+                        ${selectHtml}
+                    </div>
+                    <br>
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Valor do serviço </label>
+                        <input id="Valor" type="number" class="swal2-input" value="">
+                    </div>
+                    <br>
+                    `,
+                    focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Salvar',
+                preConfirm: () => {
+                    dto.agendamento.id = 0;
+                    dto.agendamento.hrAgendamento = $('#HrAgendamento').val();
+                    dto.agendamento.nmCliente = $('#NmCliente').val();
+                    dto.agendamento.valor = parseFloat($('#Valor').val());
+                    dto.agendamento.stats = 1;
+                    dto.servicoSelecionado = parseInt($('#Servico').val())
+                    dto.agendamento.servico = dto.servicos[dto.servicoSelecionado - 1]
+                    
+                    debugger
+                    return dto;
+                }
+            }).then((result) => {
+                const dto = result.value
+                const payload = {
+                    Agendamento: {
+                        ID: dto.agendamento.id,
+                        FuncionarioID: dto.agendamento.funcionarioID,
+                        DtDia: dto.agendamento.dtDia,
+                        HrAgendamento: dto.agendamento.hrAgendamento,
+                        NmCliente: dto.agendamento.nmCliente,
+                        Valor: dto.agendamento.valor,
+                        Stats: dto.agendamento.stats,
+                        Servico: {
+                            ID: dto.agendamento.servico.id,
+                            FuncionarioID: dto.agendamento.servico.funcionarioID,
+                            NmServico: dto.agendamento.servico.nmServico,
+                            DsServico: dto.agendamento.servico.dsServico,
+                            Valor: dto.agendamento.servico.valor,
+                            DtCriacao: dto.agendamento.servico.dtCriacao,
+                            DtModificao: dto.agendamento.servico.dtModificao,
+                            IdCriador: dto.agendamento.servico.idCriador,
+                            IdModificador: dto.agendamento.servico.idModificador,
+                        },
+                        DtCriacao: dto.agendamento.dtCriacao,
+                        DtModificao: dto.agendamento.dtModificao,
+                        IdCriador: dto.agendamento.idCriador,
+                        IdModificador: dto.agendamento.idModificador
+                    },
+                    Servicos: null,
+                    ServicoSelecionado: dto.servicoSelecionado
+                };
+                debugger
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Agendamento/AgendarExtra',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(result.value),
+                        success: function () {
+                            Swal.fire('Atualizado!', 'Agendamento salvo com sucesso.', 'success')
+                                .then(() => location.reload());
+                        },
+                        error: function () {
+                            Swal.fire('Erro!', 'Erro ao salvar agendamento.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    }
+
 </script>
+
+<style>
+    .status-Realizado {
+        --bs-table-bg: #214324 !important;
+    }
+
+    .status-Cancelado {
+        --bs-table-bg: #431F1F !important;
+    }
+</style>
