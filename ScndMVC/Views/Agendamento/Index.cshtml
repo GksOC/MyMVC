@@ -334,7 +334,7 @@
                     dto.agendamento.hrAgendamento = $('#HrAgendamento').val();
                     dto.agendamento.nmCliente = $('#NmCliente').val();
                     dto.agendamento.valor = parseFloat($('#Valor').val());
-                    dto.agendamento.stats = 1;
+                    delete dto.agendamento.stats;
                     dto.servicoSelecionado = parseInt($('#Servico').val())
                     dto.agendamento.servico = dto.servicos[dto.servicoSelecionado - 1]
                     
@@ -342,36 +342,6 @@
                     return dto;
                 }
             }).then((result) => {
-                const dto = result.value
-                const payload = {
-                    Agendamento: {
-                        ID: dto.agendamento.id,
-                        FuncionarioID: dto.agendamento.funcionarioID,
-                        DtDia: dto.agendamento.dtDia,
-                        HrAgendamento: dto.agendamento.hrAgendamento,
-                        NmCliente: dto.agendamento.nmCliente,
-                        Valor: dto.agendamento.valor,
-                        Stats: dto.agendamento.stats,
-                        Servico: {
-                            ID: dto.agendamento.servico.id,
-                            FuncionarioID: dto.agendamento.servico.funcionarioID,
-                            NmServico: dto.agendamento.servico.nmServico,
-                            DsServico: dto.agendamento.servico.dsServico,
-                            Valor: dto.agendamento.servico.valor,
-                            DtCriacao: dto.agendamento.servico.dtCriacao,
-                            DtModificao: dto.agendamento.servico.dtModificao,
-                            IdCriador: dto.agendamento.servico.idCriador,
-                            IdModificador: dto.agendamento.servico.idModificador,
-                        },
-                        DtCriacao: dto.agendamento.dtCriacao,
-                        DtModificao: dto.agendamento.dtModificao,
-                        IdCriador: dto.agendamento.idCriador,
-                        IdModificador: dto.agendamento.idModificador
-                    },
-                    Servicos: null,
-                    ServicoSelecionado: dto.servicoSelecionado
-                };
-                debugger
                 if (result.isConfirmed) {
                     $.ajax({
                         url: '/Agendamento/AgendarExtra',

@@ -4,6 +4,7 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using ScndMVC.Models.Enums;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace ScndMVC.Models
 {
@@ -34,9 +35,9 @@ namespace ScndMVC.Models
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public float? Valor { get; set; }
 
-        [Required]
         [Display(Name = "Status")]
-        public Status Stats { get; set; }
+        [JsonPropertyName("stats")]
+        public Status? Stats { get; set; }
 
         [Display(Name = "Serviço")]
         [AllowNull]

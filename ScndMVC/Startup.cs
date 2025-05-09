@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.CookiePolicy;
 using System.Text.Json;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace ScndMVC
 {
@@ -40,7 +41,8 @@ namespace ScndMVC
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; // Aceita camelCase
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;  // Ignora a diferença de maiúsculas/minúsculas
-            });
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); // Adiciona suporte para conversão de números para Enum
+            }); 
 
             services.AddDbContext<MainContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC")));

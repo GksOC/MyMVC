@@ -17,6 +17,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using System.Linq;
 using System.IO;
+using System.Text.Json;
 
 namespace ScndMVC.Controllers
 {
@@ -168,16 +169,30 @@ namespace ScndMVC.Controllers
 
         [Autorizacao("func")]
         [HttpPost]
-        public async Task<IActionResult> AgendarExtra([FromBody] AgendamentoViewModel dto)
+        public async Task<IActionResult> AgendarExtra([FromBody] JsonElement dto)
         {
-            //using var reader = new StreamReader(Request.Body); //para debugar o objeto JSON que vem da requisição
+            //using var reader = new StreamReader(Request.Body); //para debugar o objeto JSON que vem da requisição, precisa apagar o "[FromBody]" para ler
             //var rawJson = await reader.ReadToEndAsync();
-            if (dto.ServicoSelecionado == null || dto.ServicoSelecionado == 0)
+
+            if (dto.GetProperty("servicoSelecionado").ValueKind == JsonValueKind.Null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Nenhum serviço foi selecionado" });
             }
+            Agendamento agendamento = new Agendamento();
 
-            await _agendamentoService.InsertAsync(dto.Agendamento, Session.FuncionarioID(HttpContext));
+            if (dto.TryGetProperty("agendamento", out JsonElement a))
+            {
+                agendamento.NmCliente = a.GetProperty("nmCliente").GetString();
+                agendamento.Valor = (float) a.GetProperty("valor").GetSingle();
+                agendamento.DtDia = DateTime.Parse(a.GetProperty("dtDia").GetString());
+                agendamento.HrAgendamento = TimeSpan.Parse(a.GetProperty("hrAgendamento").GetString());
+                agendamento.Stats = Models.Enums.Status.Agendado;
+
+                agendamento.Servico = await _servicoService.FindByFuncionarioIDAsync(Session.FuncionarioID(HttpContext), dto.GetProperty("servicoSelecionado").GetInt32());
+            }
+
+            agendamento.adicionarCriador(Session.FuncionarioID(HttpContext));
+            await _agendamentoService.InsertAsync(agendamento, Session.FuncionarioID(HttpContext));
 
             return Ok();
         }
