@@ -133,7 +133,7 @@
                         servicoID: parseInt($('#Servico').val())
                     };
                 }
-            }).then((result) => { debugger
+            }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: '/Agendamento/Agendar',

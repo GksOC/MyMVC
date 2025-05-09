@@ -44,7 +44,7 @@ namespace ScndMVC.Models.Services
 
         public async Task<List<Agendamento>> VerificarAgendamentoHoje(int id)
         {
-            return await _context.Agendamento.Where(x => x.FuncionarioID == id && x.DtDia == DateTime.Now.Date).ToListAsync();
+            return await _context.Agendamento.Include(x => x.Servico).Where(y => y.FuncionarioID == id && y.DtDia == DateTime.Now.Date).ToListAsync();
         }
 
         public async Task<List<Agendamento>> CriarAgendamentoDoDia(int id, DateTime data)

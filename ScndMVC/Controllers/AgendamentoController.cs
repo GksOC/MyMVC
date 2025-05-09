@@ -39,8 +39,8 @@ namespace ScndMVC.Controllers
             if(list.Count == 0)
             {
                 list = await _agendamentoService.CriarAgendamentoDoDia(funcionarioID, DateTime.Now.Date);
-                return View(list);
             }
+            list = list.OrderBy(x => x.HrAgendamento).ToList();
             return View(list);
         }
 
