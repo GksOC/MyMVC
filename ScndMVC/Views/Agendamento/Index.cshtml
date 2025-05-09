@@ -48,7 +48,7 @@
                 </td>
                 <td>
                     @if( item.Stats.Equals(Status.Aberto) ){
-                        <a asp-action="Create" asp-route-id="@item.ID">Agendar</a>
+                        <button class="btn btn-primary" onclick="abrirModalAgendamento(@item.ID)">Agendar</button>
                     }
                     else if ( item.Stats.Equals(Status.Agendado) ){
                         <a asp-action="Edit" asp-route-id="@item.ID">Confirmar</a>
@@ -79,8 +79,77 @@
             cancelButtonText: 'Não'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = '/Servico/Delete/' + id;
+                window.location.href = '/Servico/Cancelar/' + id;
             }
+        });
+    }
+
+    function abrirModalAgendamento(id) {
+        $.get(`/Agendamento/SelecionarAgendamento/${id}`, function (dto) {
+            const agendamento = dto.agendamento;
+            const servicos = dto.servicos;
+
+            // Cria a lista de opções HTML
+            let selectHtml = `<select id="Servico" class="swal2-input" style="width:100%;margin-top:10px;">`;
+            servicos.forEach(s => {
+                const selected = s.id === dto.servicoSelecionado ? 'selected' : '';
+                selectHtml += `<option value="${s.id}" ${selected}>${s.nmServico}</option>`;
+            });
+            selectHtml += `</select>`;
+
+            Swal.fire({
+                title: 'Criar agendamento',
+                html:
+                    `<div class="form-group">
+                        <label class="control-label" style="display: flex; flex-direction: column;"> Dia </label>
+                        <input id="DtDia" type="date" class="swal2-input" value="${agendamento.dtDia.split('T')[0]}" readonly>
+                     </div>
+                     <br>
+                     <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Horário </label>
+                        <input id="HrAgendamento" type="time" class="swal2-input" value="${agendamento.hrAgendamento.hours.toString().padStart(2, '0')}:${agendamento.hrAgendamento.minutes.toString().padStart(2, '0')}"" readonly>
+                    </div>
+                    <br>
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Nome Cliente </label>
+                        <input id="NmCliente" type="text" class="swal2-input" value="">
+                    </div>
+                    <br>
+                    <div class="form-group" style="display: flex; flex-direction: column;">
+                        <label class="control-label"> Valor do serviço </label>
+                        <input id="Valor" type="number" class="swal2-input" value="${agendamento.valor}">
+                    </div>
+                    <br>
+                    <label class="control-label" style="display: flex; flex-direction: column;"> Serviço </label>
+                     ${selectHtml}`,
+                    focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Salvar',
+                preConfirm: () => {
+                    return {
+                        agendamentoID: agendamento.id,
+                        nmCliente: $('#NmCliente').val(),
+                        valor: parseFloat($('#Valor').val().replace(',', '.')),
+                        servicoID: parseInt($('#Servico').val())
+                    };
+                }
+            }).then((result) => { debugger
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Agendamento/Agendar',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(result.value),
+                        success: function () {
+                            Swal.fire('Atualizado!', 'Agendamento salvo com sucesso.', 'success')
+                                .then(() => location.reload());
+                        },
+                        error: function () {
+                            Swal.fire('Erro!', 'Erro ao salvar agendamento.', 'error');
+                        }
+                    });
+                }
+            });
         });
     }
 </script>

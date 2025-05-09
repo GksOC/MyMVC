@@ -28,6 +28,11 @@ namespace ScndMVC.Models.Services
             return await _context.Servico.FirstOrDefaultAsync(obj => obj.ID == id);
         }
 
+        public async Task<Servico> FindByFuncionarioIDAsync(int funcionarioID, int servicoID)
+        {
+            return await _context.Servico.FirstOrDefaultAsync(obj => obj.FuncionarioID == funcionarioID && obj.ID == servicoID);
+        }
+
         public async Task UpdateAsync(Servico obj)
         {
             bool hasAny = await _context.Servico.AnyAsync(x => x.ID == obj.ID);

@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ScndMVC.Models.Services.Exceptions;
 using System.Diagnostics;
+using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
+using System.Linq;
 
 
 namespace ScndMVC.Controllers
@@ -21,10 +23,12 @@ namespace ScndMVC.Controllers
     {
         //dependências
         private readonly AgendamentoService _agendamentoService;
+        private readonly ServicoService _servicoService;
 
-        public AgendamentoController (AgendamentoService AgendamentoService)
+        public AgendamentoController (AgendamentoService agendamentoService, ServicoService servicoService)
         {
-            _agendamentoService = AgendamentoService;
+            _agendamentoService = agendamentoService;
+            _servicoService = servicoService;
         }
 
         [Autorizacao("func")]
@@ -41,88 +45,74 @@ namespace ScndMVC.Controllers
         }
 
         [Autorizacao("func")]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [Autorizacao("func")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("ID, NmProfissional, Telefone, Email, Login, Senha, Administrador, Configuracao")]
-            Funcionario funcionario)
+        public async Task<JsonResult> Edit([FromBody] Agendamento obj)
         {
             if (!ModelState.IsValid) //validando caso o usuário esteja com javaScript desabilitado
             {
-                return View();
+                return Json(new { success = false, message = "Erro no model!" }); ;
             }
 
             try
             {
-                funcionario.adicionarCriador(HttpContext.Session.GetInt32("FuncionarioID").Value);
-                await _agendamentoService.InsertAsync(funcionario);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception e)
-            {
-                return RedirectToAction(nameof(Error), new { message = e.Message });
-            }
-        }
-
-        [Autorizacao("func")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-                return RedirectToAction(nameof(Error), new { message = "ID não encontrado!" });
-
-            var obj = await _agendamentoService.FindByIDAsync(id.Value);
-            if (obj == null)
-                return RedirectToAction(nameof(Error), new { message = "Não existe conta com ID ("+obj.ID+")" });
-
-            return View(obj);
-        }
-
-        [Autorizacao("func")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Funcionario obj)
-        {
-            if (!ModelState.IsValid) //validando caso o usuário esteja com javaScript desabilitado
-            {
-                return View(obj);
-            }
-
-            if (id != obj.ID)
-            {
-                return RedirectToAction(nameof(Error), new { message = "ID inválida!" });
-            }
-
-            try
-            {
-                obj.atualizarModificao(HttpContext.Session.GetInt32("FuncionarioID").Value);
                 await _agendamentoService.UpdateAsync(obj);
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Cadastrado com sucesso!" });
             }
             catch (Exception e)
             {
-                return RedirectToAction(nameof(Error), new { message = e.Message });
+                return Json(new { success = false, message = "Erro ao cadastrar o agendamento!" });
             }
         }
 
         [Autorizacao("func")]
         [HttpGet]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> SelecionarAgendamento(int? id)
         {
             if (id == null)
                 return RedirectToAction(nameof(Error), new { message = "ID inválida!" });
 
-            var obj = await _agendamentoService.FindByIDAsync(id.Value);
-            if (obj == null)
-                return RedirectToAction(nameof(Error), new { message = "Não existe conta com ID ("+id+")" });
+            var agendamento = await _agendamentoService.FindByIDAsync(id.Value);
 
-            return View(obj);
+            if (agendamento == null)
+                return RedirectToAction(nameof(Error), new { message = "Não existe Agendamento com ID ("+id.Value+")" });
+
+            var servicos = await _servicoService.FindAllAsync(HttpContext.Session.GetInt32("FuncionarioID").Value);
+            int? temp = null;
+            if(agendamento.Servico != null)
+            {
+                temp = agendamento.Servico.ID;
+            }
+
+            var dto = new AgendamentoViewModel
+            {
+                Agendamento = agendamento,
+                Servicos = servicos,
+                ServicoSelecionado = temp
+            };
+
+            return Json(dto);
+        }
+
+        [Autorizacao("func")]
+        [HttpPost]
+        public async Task<IActionResult> Agendar([FromBody] AgendarViewModel dto)
+        {
+            Agendamento a = await _agendamentoService.FindByIDAsync(dto.AgendamentoID);
+            if (dto.ServicoID == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Nenhum serviço foi selecionado" });
+            }
+            Servico s = await _servicoService.FindByFuncionarioIDAsync(HttpContext.Session.GetInt32("FuncionarioID").Value, dto.ServicoID.Value);
+
+            a.Servico = s; //adicionando Serviço ao Agendamento
+            a.Valor = dto.Valor;
+            a.NmCliente = dto.NmCliente;
+            a.atualizarModificao(HttpContext.Session.GetInt32("FuncionarioID").Value);
+            a.Stats = Models.Enums.Status.Agendado;
+            await _agendamentoService.UpdateAsync(a);
+
+            return Ok();
         }
 
         [Autorizacao("func")]
@@ -134,7 +124,7 @@ namespace ScndMVC.Controllers
 
             var obj = await _agendamentoService.FindByIDAsync(id.Value);
             if (obj == null)
-                return RedirectToAction(nameof(Error), new { message = "Não existe conta com ID (" + id + ")" });
+                return RedirectToAction(nameof(Error), new { message = "Não existe agendamento com ID (" + id + ")" });
 
             return View(obj);
         }
@@ -142,11 +132,10 @@ namespace ScndMVC.Controllers
         [Autorizacao("func")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Cancelar(int id)
         {
             try
             {
-                await _agendamentoService.RemoveAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch (IntegrityException e)

@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using ScndMVC.Models.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ScndMVC.Models
 {
@@ -28,9 +29,6 @@ namespace ScndMVC.Models
         [Display(Name = "Cliente")]
         public string NmCliente { get; set; }
 
-        [Display(Name = "Serviço")]
-        public Servico Servico { get; set; }
-
         [Range(0.0f, 10000.0f, ErrorMessage = ("{0} deve ter um tamanho entre {1} e {2}"))]
         [Display(Name = "Valor")]
         [DisplayFormat(DataFormatString = "{0:F2}")]
@@ -39,6 +37,10 @@ namespace ScndMVC.Models
         [Required]
         [Display(Name = "Status")]
         public Status Stats { get; set; }
+
+        [Display(Name = "Serviço")]
+        [AllowNull]
+        public Servico Servico { get; set; }
 
 
         public Agendamento()

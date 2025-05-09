@@ -18,19 +18,14 @@ namespace ScndMVC.Models.Services
             _context = context;
         }
 
-        public async Task<List<Funcionario>> FindAllAsync()
+        public async Task<Agendamento> FindByIDAsync(int id)
         {
-            return await _context.Funcionario.OrderBy(x => x.Login).ToListAsync();
+            return await _context.Agendamento.Include(x => x.Servico).FirstOrDefaultAsync(obj => obj.ID == id);
         }
 
-        public async Task<Funcionario> FindByIDAsync(int id)
+        public async Task UpdateAsync(Agendamento obj)
         {
-            return await _context.Funcionario.FirstOrDefaultAsync(obj => obj.ID == id);
-        }
-
-        public async Task UpdateAsync(Funcionario obj)
-        {
-            bool hasAny = await _context.Funcionario.AnyAsync(x => x.ID == obj.ID);
+            bool hasAny = await _context.Agendamento.AnyAsync(x => x.ID == obj.ID);
             if (!hasAny)
             {
                 throw new KeyNotFoundException("ID não encontrada");
@@ -46,25 +41,6 @@ namespace ScndMVC.Models.Services
             }
         }
 
-        public async Task InsertAsync(Funcionario obj)
-        {
-            _context.Add(obj);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task RemoveAsync(int id)
-        {
-            try
-            {
-                var obj = _context.Funcionario.Find(id);
-                _context.Funcionario.Remove(obj);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException e)
-            {
-                throw new IntegrityException(e.Message);
-            }
-        }
 
         public async Task<List<Agendamento>> VerificarAgendamentoHoje(int id)
         {
