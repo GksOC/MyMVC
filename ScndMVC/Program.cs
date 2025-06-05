@@ -17,9 +17,9 @@ namespace ScndMVC
                 {
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        serverOptions.Listen(IPAddress.Any, 5000, listenOptions =>
+                        serverOptions.Listen(IPAddress.Any, 443, listenOptions =>
                         {
-                            listenOptions.UseHttps("certs/meuCert.crt", "certs/meuCert.key");
+                            listenOptions.UseHttps("certs/meuCert.pfx", "3826427540028922");
                         });
                     });
                     webBuilder.UseStartup<Startup>();
