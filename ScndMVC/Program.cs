@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.Net;
 
 namespace ScndMVC
 {
@@ -14,6 +15,13 @@ namespace ScndMVC
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Listen(IPAddress.Any, 5000, listenOptions =>
+                        {
+                            listenOptions.UseHttps("certs/meuCert.crt", "certs/meuCert.key");
+                        });
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }
