@@ -15,13 +15,13 @@ namespace ScndMVC
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureKestrel(serverOptions =>
-                    {
-                        serverOptions.Listen(IPAddress.Any, 443, listenOptions =>
-                        {
-                            listenOptions.UseHttps("certs/meuCert.pfx", "3826427540028922");
-                        });
-                    });
+                    //webBuilder.ConfigureKestrel(serverOptions =>
+                    //{
+                    //    serverOptions.Listen(IPAddress.Any, 80, listenOptions =>
+                    //    {
+                    //        listenOptions.UseHttps("certs/meuCert.pfx", "3826427540028922");
+                    //    });
+                    //});
                     webBuilder.UseStartup<Startup>();
                 });
     }

@@ -45,7 +45,11 @@ namespace ScndMVC
             }); 
 
             services.AddDbContext<MainContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("MainContext"), builder => builder.MigrationsAssembly("ScndMVC")));
+                    options.UseMySql(
+                         Configuration.GetConnectionString("MainContext"),
+                         mySqlOptions => mySqlOptions.MigrationsAssembly(typeof(MainContext).Assembly.FullName)
+                    )
+            );
 
             services.AddSession();
 
@@ -62,7 +66,7 @@ namespace ScndMVC
                 options.LoginPath = "/Funcionario/Login";
                 options.AccessDeniedPath = "/Home/index";
                 options.LogoutPath = "/Funcionario/Index";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Sempre usar HTTPS
+                //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔐 Sempre usar HTTPS
                 options.Cookie.SameSite = SameSiteMode.Lax; // ou Strict, dependendo do comportamento desejado
                 options.Cookie.HttpOnly = true;
             });
@@ -73,8 +77,6 @@ namespace ScndMVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SeedingService seedingService, MainContext context)
         {
-            // Realiza a migration automática ao iniciar a aplicação
-            context.Database.Migrate();
 
             var enUS = new CultureInfo("en-US");
             var localizationOptions = new RequestLocalizationOptions
@@ -84,12 +86,19 @@ namespace ScndMVC
                 SupportedUICultures = new List<CultureInfo>() { enUS }
             };
 
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<MainContext>();
+                dbContext.Database.Migrate(); // Incializarndo a migração para o banco de dados obrigatoriamente
+                seedingService.Seed(); // Populando o banco de dados com dados iniciais
+            }
+
             app.UseRequestLocalization(localizationOptions);
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                seedingService.Seed();
+                //seedingService.Seed(); redundante, pois já foi chamado acima
             }
             else
             {

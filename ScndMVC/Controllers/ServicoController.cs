@@ -120,7 +120,7 @@ namespace ScndMVC.Controllers
             }
             catch (IntegrityException e)
             {
-                return RedirectToAction(nameof(Error), new { message = "Erro de integridade!" });
+                return RedirectToAction(nameof(Error), new { message = "Erro de integridade!" + e });
             }
         }
 

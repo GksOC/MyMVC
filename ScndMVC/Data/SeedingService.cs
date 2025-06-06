@@ -18,6 +18,8 @@ namespace ScndMVC.Data
 
         public void Seed()
         {
+            Console.WriteLine("Entrou no Seeding Service!");
+
             if (!(_context.Agendamento.Any() ||
                _context.Configuracao.Any() ||
                _context.Funcionario.Any() ||
@@ -53,9 +55,11 @@ namespace ScndMVC.Data
                 Agendamento a3 = new Agendamento(3, administrador, f1, new DateTime(2025, 4, 30), new TimeSpan(7, 0, 0), "Beltrano", so1, null, Status.Cancelado);
                 _context.Agendamento.AddRange(a1, a2, a3);
 
+                Console.WriteLine("O Seeding service preencheu o banco!");
             }
 
             _context.SaveChanges();
+            Console.WriteLine("Seeding service executado!");
         }
     }
 }

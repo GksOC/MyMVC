@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44316",
-      "sslPort": 44316
+      "applicationUrl": "http://localhost:80",
+      "sslPort": 80
     }
   },
   "profiles": {
@@ -18,7 +18,7 @@
     "ScndMVC": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001",
+      "applicationUrl": "http://localhost:80",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
