@@ -106,7 +106,8 @@ namespace ScndMVC
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseHttpMethodOverride(); // Permite o uso de métodos HTTP como PUT e DELETE em navegadores que não os suportam diretamente
+            //app.UseHttpsRedirection(); // Redireciona todas as requisições HTTP para HTTPS (descomente se necessário)
             app.UseStaticFiles();
 
             app.UseRouting();
