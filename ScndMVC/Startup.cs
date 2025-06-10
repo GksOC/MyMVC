@@ -105,8 +105,10 @@ namespace ScndMVC
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
+            
+            //redirecionamento em HTTPS
+            //app.UseHttpsRedirection();
+            
             app.UseStaticFiles();
 
             app.UseRouting();
