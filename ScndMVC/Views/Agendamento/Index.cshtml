@@ -10,6 +10,7 @@
 
 <p>
     <button class="btn btn-secondary" onclick="abrirModalAgendamentoExtra()">Criar Agendamento Extra</button>
+    <button class="btn btn-secondary" onclick="abrirModalAgendamentoFuturo()">Agendar para outro dia</button>
 </p>
 
 <table class="table table-striped table-hover">
@@ -211,6 +212,21 @@
                     focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: 'Salvar',
+                didOpen: () => {
+                    // Crie um mapa de id do serviço para valor
+                    const servicoValores = {};
+                    servicos.forEach(s => servicoValores[s.id] = s.valor);
+
+                    // Atualize o valor ao trocar o serviço
+                    $('#Servico').on('change', function () {
+                        const servicoId = $(this).val();
+                        $('#Valor').val(servicoValores[servicoId] || '');
+                    });
+
+                    // Opcional: já preenche o valor do serviço selecionado inicialmente
+                    const servicoInicial = $('#Servico').val();
+                    $('#Valor').val(servicoValores[servicoInicial] || '');
+                },
                 preConfirm: () => {
                     return {
                         agendamentoID: agendamento.id,
@@ -302,7 +318,7 @@
             selectHtml += `</select>`;
 
             Swal.fire({
-                title: 'Agendamento extra (${data})',
+                title: `Agendamento extra`,
                 html:
                     `
                     <div class="form-group" style="display: flex; flex-direction: column;">
@@ -329,6 +345,21 @@
                     focusConfirm: false,
                 showCancelButton: true,
                 confirmButtonText: 'Salvar',
+                didOpen: () => {
+                    // Crie um mapa de id do serviço para valor
+                    const servicoValores = {};
+                    servicos.forEach(s => servicoValores[s.id] = s.valor);
+
+                    // Atualize o valor ao trocar o serviço
+                    $('#Servico').on('change', function () {
+                        const servicoId = $(this).val();
+                        $('#Valor').val(servicoValores[servicoId] || '');
+                    });
+
+                    // Opcional: já preenche o valor do serviço selecionado inicialmente
+                    const servicoInicial = $('#Servico').val();
+                    $('#Valor').val(servicoValores[servicoInicial] || '');
+                },
                 preConfirm: () => {
                     dto.agendamento.id = 0;
                     dto.agendamento.hrAgendamento = $('#HrAgendamento').val();
